@@ -8,6 +8,8 @@ impl:
   id: KIT939
   path: /docs/impls/svelte.md
 commits:
+  - sha: 86c36c84506fea28cf08cb7f72d80f2028d15cda
+    message: Add lock file changes
   - sha: 1153f0981f8f3604ce7263697d371b7abddeab46
     message: >-
       Set up Svelte project infrastructure with working webpage and development
