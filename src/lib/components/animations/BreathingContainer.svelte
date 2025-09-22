@@ -1,24 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { breathingDuration, organicTiming } from '$lib/utils/randomness';
+	import { breathingDuration } from '$lib/utils/randomness';
 
 	let { children } = $props();
 	let containerElement: HTMLElement;
 
 	onMount(() => {
 		if (containerElement) {
-			// Set up breathing animation with organic timing
-			const updateBreathing = () => {
-				const duration = breathingDuration(6000);
-				const timing = organicTiming();
-
-				containerElement.style.setProperty('--breathing-duration', `${duration}ms`);
-				containerElement.style.setProperty('--breathing-timing', timing);
-
-				setTimeout(updateBreathing, duration);
-			};
-
-			updateBreathing();
+			// Set a gentle breathing duration once, avoid constant changes that cause stutters
+			const duration = breathingDuration(7000);
+			containerElement.style.setProperty('--breathing-duration', `${duration}ms`);
 		}
 	});
 </script>
@@ -29,16 +20,16 @@
 
 <style>
 	.breathing-container {
-		animation: breathing var(--breathing-duration, 6000ms) var(--breathing-timing, linear) infinite
-			alternate;
+		animation: breathing var(--breathing-duration, 6000ms) ease-in-out infinite alternate;
+		will-change: transform;
 	}
 
 	@keyframes breathing {
 		0% {
-			transform: scale(1);
+			transform: scale3d(1, 1, 1);
 		}
 		100% {
-			transform: scale(1.03);
+			transform: scale3d(1.02, 1.02, 1);
 		}
 	}
 
