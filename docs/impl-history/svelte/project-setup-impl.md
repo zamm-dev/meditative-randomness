@@ -16,6 +16,7 @@ This implementation plan sets up the basic project infrastructure and tooling fo
 ## Goals
 
 Set up a SvelteKit project with all required development commands and git hooks as specified in XCN825:
+
 - Command to format all code
 - Command to lint the code
 - Command to run all tests
