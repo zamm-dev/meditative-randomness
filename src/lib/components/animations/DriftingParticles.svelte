@@ -25,8 +25,8 @@
 				y: Math.random() * 100,
 				opacity: subtleOpacity(0.4, 0.3),
 				delay: staggeredDelay(3000),
-				duration: breathingDuration(8000),
-				size: 2 + Math.random() * 4
+				duration: breathingDuration(20_000),
+				size: 20 + Math.random() * 20
 			};
 		});
 	});
@@ -61,29 +61,30 @@
 	}
 
 	.particle {
+		--drift-distance: 40px;
 		position: absolute;
-		background: radial-gradient(circle, var(--color-blue-light), transparent);
+		background: #b8d8e8;
 		border-radius: 50%;
 		animation: drift infinite ease-in-out alternate;
 	}
 
 	@keyframes drift {
 		0% {
-			transform: translate(0, 0) scale(1);
+			transform: translate3d(0, 0) scale(1);
 			opacity: var(--particle-opacity, 0.4);
 		}
 		25% {
-			transform: translate(10px, -15px) scale(1.1);
+			transform: translate3d(10px, calc(var(--drift-distance) * -0.75), 0) scale(1.2);
 		}
 		50% {
-			transform: translate(-5px, -25px) scale(0.9);
-			opacity: calc(var(--particle-opacity, 0.4) * 0.7);
+			transform: translate3d(-5px, calc(var(--drift-distance) * -1.25), 0) scale(0.7);
+			opacity: calc(var(--particle-opacity, 0.4) * 0.8);
 		}
 		75% {
-			transform: translate(15px, -10px) scale(1.05);
+			transform: translate3d(15px, calc(var(--drift-distance) * -0.5), 0) scale(1.1);
 		}
 		100% {
-			transform: translate(-8px, 5px) scale(0.95);
+			transform: translate3d(-8px, calc(var(--drift-distance) * 0.5), 0) scale(0.9);
 			opacity: var(--particle-opacity, 0.4);
 		}
 	}

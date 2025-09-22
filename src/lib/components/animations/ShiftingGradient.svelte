@@ -1,35 +1,4 @@
-<script lang="ts">
-	import { onMount } from 'svelte';
-	import { colorTemperature, breathingDuration } from '$lib/utils/randomness';
-
-	let gradientElement: HTMLElement;
-	let currentTemperature = $state('neutral');
-
-	onMount(() => {
-		// Set initial color temperature
-		currentTemperature = colorTemperature();
-
-		// Update color temperature periodically with breathing-like rhythm
-		const updateTemperature = () => {
-			currentTemperature = colorTemperature();
-			setTimeout(updateTemperature, breathingDuration(15000));
-		};
-
-		setTimeout(updateTemperature, breathingDuration(5000));
-	});
-
-	$effect(() => {
-		if (gradientElement) {
-			gradientElement.style.setProperty('--temperature', currentTemperature);
-		}
-	});
-</script>
-
-<div
-	bind:this={gradientElement}
-	class="shifting-gradient"
-	data-temperature={currentTemperature}
-></div>
+<div class="shifting-gradient"></div>
 
 <style>
 	.shifting-gradient {
@@ -39,37 +8,45 @@
 		width: 100%;
 		height: 100%;
 		z-index: -2;
-		transition: background var(--duration-slower) var(--ease-in-out);
-	}
-
-	.shifting-gradient[data-temperature='warm'] {
 		background: linear-gradient(
-			135deg,
-			var(--color-neutral-lightest) 0%,
-			#f0e6d8 25%,
-			var(--color-green-light) 60%,
-			var(--color-blue-light) 100%
+			45deg,
+			#f5f1eb,
+			#f0e8dc,
+			#e8d8c8,
+			#e0c8a8,
+			#d8b898,
+			#e0c8a8,
+			#e8d8c8,
+			#f0e8dc,
+			#f5f1eb
 		);
+		background-size: 400% 400%;
+		animation: gradientShift 35s ease-in-out infinite;
 	}
 
-	.shifting-gradient[data-temperature='cool'] {
-		background: linear-gradient(
-			135deg,
-			var(--color-blue-light) 0%,
-			#e8f2f8 25%,
-			var(--color-neutral-lightest) 60%,
-			var(--color-green-light) 100%
-		);
-	}
-
-	.shifting-gradient[data-temperature='neutral'] {
-		background: var(--gradient-secondary);
+	@keyframes gradientShift {
+		0% {
+			background-position: 0% 50%;
+		}
+		25% {
+			background-position: 100% 50%;
+		}
+		50% {
+			background-position: 100% 100%;
+		}
+		75% {
+			background-position: 0% 100%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.shifting-gradient {
-			transition: none;
-			background: var(--gradient-secondary);
+			animation: none;
+			background: linear-gradient(45deg, #f5f1eb 0%, #e8d8c8 50%, #c8d8b8 100%);
+			background-size: 100% 100%;
 		}
 	}
 </style>

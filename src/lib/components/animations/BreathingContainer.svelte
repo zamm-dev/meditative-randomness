@@ -29,18 +29,16 @@
 
 <style>
 	.breathing-container {
-		animation: breathing var(--breathing-duration, 6000ms) var(--breathing-timing, ease-in-out)
-			infinite alternate;
+		animation: breathing var(--breathing-duration, 6000ms) var(--breathing-timing, linear) infinite
+			alternate;
 	}
 
 	@keyframes breathing {
 		0% {
 			transform: scale(1);
-			filter: brightness(1);
 		}
 		100% {
-			transform: scale(1.005);
-			filter: brightness(1.02);
+			transform: scale(1.03);
 		}
 	}
 
