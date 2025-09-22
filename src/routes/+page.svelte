@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MeditativeCard from '$lib/components/ui/MeditativeCard.svelte';
+	import MeditationTimer from '$lib/components/timer/MeditationTimer.svelte';
 	import { onMount } from 'svelte';
 	import { staggeredDelay } from '$lib/utils/randomness';
 
@@ -36,42 +36,13 @@
 	<header class="hero-section">
 		<h1 bind:this={titleElement} class="main-title animate-in">Meditative Randomness</h1>
 		<p bind:this={subtitleElement} class="subtitle animate-in">
-			Where stillness meets gentle surprise
+			Open your practice up to the random influences of the universe<br />
+			Let Reality also have a say in how long you meditate for
 		</p>
 	</header>
 
-	<section class="content-section">
-		<div class="cards-grid">
-			<MeditativeCard variant="primary" elevation="medium">
-				<div bind:this={cardElements[0]} class="card-content animate-in">
-					<h2>Mindful Moments</h2>
-					<p>
-						Discover the beauty in unexpected moments. Let randomness guide you to new perspectives
-						while maintaining the peace of mindful awareness.
-					</p>
-				</div>
-			</MeditativeCard>
-
-			<MeditativeCard variant="gentle" elevation="soft">
-				<div bind:this={cardElements[1]} class="card-content animate-in">
-					<h2>Flowing Uncertainty</h2>
-					<p>
-						Embrace the gentle dance between intention and surrender. Find serenity in not knowing
-						what comes next, while staying grounded in the present.
-					</p>
-				</div>
-			</MeditativeCard>
-
-			<MeditativeCard variant="default" elevation="deep">
-				<div bind:this={cardElements[2]} class="card-content animate-in">
-					<h2>Synchronistic Grace</h2>
-					<p>
-						When we release the need to control, we open ourselves to the wisdom of spontaneity.
-						Every random moment becomes a teacher, every surprise a gift.
-					</p>
-				</div>
-			</MeditativeCard>
-		</div>
+	<section class="timer-section">
+		<MeditationTimer />
 	</section>
 
 	<footer class="page-footer">
@@ -86,17 +57,23 @@
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-16);
 		min-height: 100vh;
 	}
 
 	.hero-section {
 		text-align: center;
-		padding: var(--space-20) 0;
+		padding: var(--space-20) 0 var(--space-8);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: var(--space-6);
+	}
+
+	.timer-section {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		margin: 0;
 	}
 
 	.main-title {
@@ -115,41 +92,6 @@
 		max-width: 600px;
 		margin: 0;
 		opacity: 0.9;
-	}
-
-	.content-section {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.cards-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: var(--space-8);
-		width: 100%;
-		max-width: 1000px;
-	}
-
-	.card-content {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-4);
-	}
-
-	.card-content h2 {
-		font-size: var(--text-2xl);
-		font-weight: var(--font-weight-light);
-		color: var(--color-green-deep);
-		margin: 0;
-	}
-
-	.card-content p {
-		font-size: var(--text-base);
-		line-height: var(--leading-relaxed);
-		color: var(--color-neutral-dark);
-		margin: 0;
 	}
 
 	.page-footer {
@@ -198,11 +140,6 @@
 
 		.subtitle {
 			font-size: var(--text-lg);
-		}
-
-		.cards-grid {
-			grid-template-columns: 1fr;
-			gap: var(--space-6);
 		}
 	}
 

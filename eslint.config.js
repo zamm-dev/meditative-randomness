@@ -46,7 +46,14 @@ export default [
 			},
 			globals: {
 				HTMLElement: 'readonly',
+				HTMLInputElement: 'readonly',
+				Event: 'readonly',
+				AudioContext: 'readonly',
 				setTimeout: 'readonly',
+				setInterval: 'readonly',
+				clearInterval: 'readonly',
+				requestAnimationFrame: 'readonly',
+				console: 'readonly',
 				Math: 'readonly',
 				Date: 'readonly'
 			}
