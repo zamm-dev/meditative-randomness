@@ -30,6 +30,9 @@ On push, the tests should be run as well.
 
 Make sure that `.gitignore` ignores all appropriate files and folders for this tech stack. Avoid placing trailing slashes after ignored folder names in order to prevent VS Code from highlighting them as a new folder.
 
+> [!NOTE]
+> If using Playwright, make sure to ignore Playwright output files such as `playwright-report/` and `test-results/`
+
 ## Implementation Notes
 
 In order to verify the correct implementation of this spec, perform the following checks:
