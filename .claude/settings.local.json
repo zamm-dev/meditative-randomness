@@ -1,25 +1,29 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(eza:*)",
-      "Bash(npm install:*)",
-      "Bash(npx eslint:*)",
-      "Bash(git add:*)",
-      "Bash(npm run build:*)",
-      "Bash(npm run typecheck:*)",
-      "Bash(npm run lint:*)",
-      "Bash(npm test)",
-      "Bash(npm run format:*)",
-      "Bash(mv:*)",
-      "Bash(npm test:*)",
-      "Bash(find:*)",
-      "Bash(./dist/zamm implement:*)",
-      "Bash(xxd:*)",
-      "Bash(git cherry-pick:*)",
-      "Bash(git checkout:*)",
-      "Bash(git log:*)"
-    ],
-    "deny": [],
-    "ask": []
-  }
+	"permissions": {
+		"allow": [
+			"Bash(eza:*)",
+			"Bash(npm install:*)",
+			"Bash(npx eslint:*)",
+			"Bash(git add:*)",
+			"Bash(npm run build:*)",
+			"Bash(npm run typecheck:*)",
+			"Bash(npm run lint:*)",
+			"Bash(npm test)",
+			"Bash(npm run format:*)",
+			"Bash(mv:*)",
+			"Bash(npm test:*)",
+			"Bash(find:*)",
+			"Bash(./dist/zamm implement:*)",
+			"Bash(xxd:*)",
+			"Bash(git cherry-pick:*)",
+			"Bash(git checkout:*)",
+			"Bash(git log:*)",
+			"Bash(pnpm add:*)",
+			"Bash(pnpm test:*)",
+			"Bash(pnpm format:*)",
+			"Bash(pnpm lint:*)"
+		],
+		"deny": [],
+		"ask": []
+	}
 }
