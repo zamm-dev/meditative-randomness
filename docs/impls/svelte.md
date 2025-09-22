@@ -44,10 +44,13 @@ src/
 │   │   │   ├── ShiftingGradient.svelte      # Continuously moving background gradient
 │   │   │   ├── DriftingParticles.svelte     # Organic particle system
 │   │   │   └── BreathingContainer.svelte    # Subtle breathing animation wrapper
+│   │   ├── timer/                   # Meditation timer components
+│   │   │   └── MeditationTimer.svelte       # Random meditation timer with MM:SS inputs
 │   │   └── ui/
 │   │       └── MeditativeCard.svelte        # Glass-morphism card component
 │   ├── utils/
-│   │   └── randomness.ts            # Controlled randomness utilities
+│   │   ├── randomness.ts            # Controlled randomness utilities
+│   │   └── timer.ts                 # Time parsing, formatting, and validation utilities
 │   └── assets/                      # Static assets
 ├── app.html                         # HTML template with font imports
 └── app.d.ts                         # TypeScript declarations
@@ -126,10 +129,34 @@ The `randomness.ts` utility provides controlled organic variations:
 - `organicPosition()` - Subtle movement positioning
 - `staggeredDelay()` - Entrance animation timing
 
+### Timer System
+
+**MeditationTimer**: A complete random meditation timer component that implements the Random Meditation Timer specification (FQP740).
+
+**Features**:
+
+- MM:SS time input fields with automatic formatting and validation
+- Real-time average calculation that updates with every keystroke
+- Random duration generation from uniform distribution between min/max times
+- Elapsed time display during meditation (target duration remains hidden)
+- Gentle completion bell sound using Web Audio API
+- Single-card interface with smooth state transitions
+
+**Timer Utilities**: The `timer.ts` module provides comprehensive time handling:
+
+- `parseTimeString()` - Parse MM:SS format with validation
+- `formatTimeInput()` - Real-time input formatting with colon insertion
+- `generateRandomDuration()` - Uniform random time generation
+- `calculateAverage()` - Live average calculation
+- `validateTimeRange()` - Input validation and error handling
+
+**Testing**: Complete Playwright test suite covering all timer functionality including input validation, state transitions, and completion flow.
+
 ### Performance Considerations
 
 - All animations use CSS transforms for 60fps performance
 - Hardware acceleration with `transform3d` and `will-change`
 - Minimal JavaScript for animation logic
+- Timer uses efficient `setInterval` with proper cleanup
 - Comprehensive accessibility support with motion preferences
 - Bundle-optimized with strategic CSS custom properties
