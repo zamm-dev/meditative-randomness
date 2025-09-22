@@ -43,6 +43,12 @@ export default [
 			parser: svelteParser,
 			parserOptions: {
 				parser: typescriptParser
+			},
+			globals: {
+				HTMLElement: 'readonly',
+				setTimeout: 'readonly',
+				Math: 'readonly',
+				Date: 'readonly'
 			}
 		},
 		plugins: {
