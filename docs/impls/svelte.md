@@ -57,15 +57,19 @@ tests/                               # Playwright tests
 
 ### Git Hooks
 
-Pre-commit hooks automatically run:
+The project uses lefthook for git hooks that automatically maintain code quality.
 
-- Code formatting
-- Linting
-- Production build
+**Pre-commit hooks automatically run:**
 
-Pre-push hooks run:
+- `pnpm format` - Prettier formatting with automatic staging
+- `pnpm lint --fix` - ESLint with automatic fixes and staging
+- `pnpm build` - Production build verification
 
-- All tests
+**Pre-push hooks run:**
+
+- `pnpm test` - All Playwright tests
+
+**Important**: The hooks are configured with `stage_fixed: true` to automatically stage formatting and linting changes, ensuring commits include all automated fixes. This prevents the issue where formatting changes are made but not committed.
 
 To install hooks: `pnpm lefthook install`
 

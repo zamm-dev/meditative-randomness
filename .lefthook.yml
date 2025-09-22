@@ -2,8 +2,10 @@ pre-commit:
   commands:
     format:
       run: pnpm format
+      stage_fixed: true
     lint:
-      run: pnpm lint
+      run: pnpm lint --fix
+      stage_fixed: true
     build:
       run: pnpm build
 
