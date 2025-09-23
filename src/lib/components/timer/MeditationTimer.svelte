@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import MeditativeCard from '$lib/components/ui/MeditativeCard.svelte';
+	import MeditationHistory from '$lib/components/timer/MeditationHistory.svelte';
 	import {
 		parseTimeString,
 		formatTimeInput,
@@ -10,6 +11,7 @@
 		secondsToTimeString
 	} from '$lib/utils/timer';
 	import { requestWakeLock, releaseWakeLock } from '$lib/utils/wake-lock';
+	import { saveMeditationRecord } from '$lib/utils/history';
 
 	let minTimeInput = $state('5:00');
 	let maxTimeInput = $state('10:00');
@@ -85,6 +87,9 @@
 		// Release wake lock when timer completes
 		// Don't await to avoid blocking the state change
 		releaseWakeLock();
+
+		// Save meditation record to history
+		saveMeditationRecord(elapsedSeconds);
 
 		timerState = 'completed';
 
@@ -202,6 +207,8 @@
 				<div class="completion-title">Practice Complete</div>
 				<div class="completion-time">Total time: {secondsToTimeString(elapsedSeconds)}</div>
 				<button onclick={resetTimer} class="timer-button reset-button"> New Practice </button>
+
+				<MeditationHistory />
 			</div>
 		{/if}
 	</MeditativeCard>
