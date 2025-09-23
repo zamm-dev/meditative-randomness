@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Trash2, Check, X } from 'lucide-svelte';
 	import {
 		getMeditationHistory,
 		deleteMeditationRecord,
@@ -50,13 +51,19 @@
 					</div>
 					<div class="record-actions">
 						{#if deleteConfirmId === record.id}
-							<button onclick={() => handleDelete(record.id)} class="confirm-button">
-								Confirm Delete
+							<button
+								onclick={() => handleDelete(record.id)}
+								class="confirm-button"
+								title="Confirm Delete"
+							>
+								<Check size={16} />
 							</button>
-							<button onclick={cancelDelete} class="cancel-button"> Cancel </button>
+							<button onclick={cancelDelete} class="cancel-button" title="Cancel">
+								<X size={16} />
+							</button>
 						{:else}
 							<button onclick={() => handleDelete(record.id)} class="delete-button" title="Delete">
-								×
+								<Trash2 size={16} />
 							</button>
 						{/if}
 					</div>
@@ -164,11 +171,9 @@
 		background: none;
 		color: var(--color-neutral-dark);
 		opacity: 0.4;
-		font-size: 18px;
-		line-height: 1;
 		padding: var(--space-1);
-		width: 24px;
-		height: 24px;
+		width: 32px;
+		height: 32px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -181,31 +186,30 @@
 
 	.confirm-button,
 	.cancel-button {
-		padding: var(--space-2) var(--space-3);
-		font-size: var(--text-xs);
-		min-width: 60px;
+		padding: var(--space-2);
+		width: 32px;
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.confirm-button {
 		background: #dc3545;
 		color: white;
-		border: 1px solid #dc3545;
 	}
 
 	.confirm-button:hover {
 		background: #c82333;
-		border-color: #c82333;
 	}
 
 	.cancel-button {
 		background: rgba(108, 117, 125, 0.1);
 		color: #6c757d;
-		border: 1px solid rgba(108, 117, 125, 0.2);
 	}
 
 	.cancel-button:hover {
 		background: rgba(108, 117, 125, 0.2);
-		border-color: rgba(108, 117, 125, 0.3);
 	}
 
 	@media (max-width: 768px) {
