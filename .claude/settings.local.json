@@ -22,7 +22,11 @@
 			"Bash(pnpm format:*)",
 			"Bash(pnpm lint:*)",
 			"Bash(pnpm check:*)",
-			"WebFetch(domain:stackoverflow.com)"
+			"WebFetch(domain:stackoverflow.com)",
+			"Bash(pnpm build:*)",
+			"Bash(pnpm exec playwright test:*)",
+			"WebSearch",
+			"Bash(pnpm exec tsc:*)"
 		],
 		"deny": [],
 		"ask": []
