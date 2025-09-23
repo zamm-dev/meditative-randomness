@@ -70,7 +70,7 @@ export function generateRandomDuration(minTime: TimeInput, maxTime: TimeInput): 
  * Validate that max time is greater than min time
  */
 export function validateTimeRange(minTime: TimeInput, maxTime: TimeInput): boolean {
-	return timeToSeconds(maxTime) > timeToSeconds(minTime);
+	return timeToSeconds(maxTime) >= timeToSeconds(minTime);
 }
 
 /**

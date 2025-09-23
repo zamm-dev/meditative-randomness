@@ -9,6 +9,7 @@
 		validateTimeRange,
 		secondsToTimeString
 	} from '$lib/utils/timer';
+	import { requestWakeLock, releaseWakeLock } from '$lib/utils/wake-lock';
 
 	let minTimeInput = $state('5:00');
 	let maxTimeInput = $state('10:00');
@@ -48,6 +49,10 @@
 		elapsedSeconds = 0;
 		timerState = 'running';
 
+		// Request wake lock to prevent device sleep during meditation
+		// Don't await to avoid blocking the UI
+		requestWakeLock();
+
 		intervalId = setInterval(() => {
 			elapsedSeconds++;
 
@@ -62,6 +67,11 @@
 			clearInterval(intervalId);
 			intervalId = null;
 		}
+
+		// Release wake lock when timer is stopped
+		// Don't await to avoid blocking the UI
+		releaseWakeLock();
+
 		timerState = 'idle';
 		elapsedSeconds = 0;
 	}
@@ -71,6 +81,11 @@
 			clearInterval(intervalId);
 			intervalId = null;
 		}
+
+		// Release wake lock when timer completes
+		// Don't await to avoid blocking the state change
+		releaseWakeLock();
+
 		timerState = 'completed';
 
 		// Play completion sound
@@ -116,6 +131,8 @@
 		if (audioContext) {
 			audioContext.close();
 		}
+		// Ensure wake lock is released on component cleanup
+		releaseWakeLock();
 	});
 </script>
 
@@ -165,7 +182,7 @@
 				</button>
 
 				{#if !isValidRange && minTime && maxTime}
-					<div class="error-message">Maximum time must be greater than minimum time</div>
+					<div class="error-message">Maximum time can't be less than minimum time</div>
 				{/if}
 			</div>
 		{:else if timerState === 'running'}

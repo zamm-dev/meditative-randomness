@@ -27,7 +27,10 @@ export default [
 			},
 			globals: {
 				console: 'readonly',
-				process: 'readonly'
+				process: 'readonly',
+				navigator: 'readonly',
+				WakeLockSentinel: 'readonly',
+				EventTarget: 'readonly'
 			}
 		},
 		plugins: {

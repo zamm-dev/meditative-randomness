@@ -1,9 +1,64 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+interface TestGlobal {
+	wakeLockRequested: boolean;
+	wakeLockReleased: boolean;
+}
+
+interface MockWakeLockSentinel {
+	released: boolean;
+	release(): Promise<void>;
+	addEventListener(type: string, listener: () => void): void;
+}
 
 test.describe('Meditation Timer', () => {
 	test.beforeEach(async ({ page }) => {
+		// Set prefers-reduced-motion to disable animations
+		await page.emulateMedia({ reducedMotion: 'reduce' });
 		await page.goto('/');
 	});
+
+	// Helper function to get wake lock state from page
+	async function getWakeLockState(page: Page) {
+		return await page.evaluate(() => {
+			const testGlobal = globalThis as typeof globalThis & TestGlobal;
+			return {
+				wakeLockRequested: testGlobal.wakeLockRequested,
+				wakeLockReleased: testGlobal.wakeLockReleased
+			};
+		});
+	}
+
+	// Helper function to setup wake lock mocking
+	async function setupWakeLockMock(page: Page) {
+		await page.addInitScript(() => {
+			let mockWakeLock: MockWakeLockSentinel | null = null;
+			const testGlobal = globalThis as typeof globalThis & TestGlobal;
+			testGlobal.wakeLockRequested = false;
+			testGlobal.wakeLockReleased = false;
+
+			Object.defineProperty(globalThis.navigator, 'wakeLock', {
+				value: {
+					request: async () => {
+						testGlobal.wakeLockRequested = true;
+						mockWakeLock = {
+							released: false,
+							release: async () => {
+								testGlobal.wakeLockReleased = true;
+								if (mockWakeLock) {
+									mockWakeLock.released = true;
+								}
+							},
+							addEventListener: () => {}
+						};
+						return mockWakeLock;
+					}
+				},
+				writable: true,
+				configurable: true
+			});
+		});
+	}
 
 	test('displays timer inputs and calculates average', async ({ page }) => {
 		// Check that timer inputs are visible
@@ -52,7 +107,7 @@ test.describe('Meditation Timer', () => {
 		await page.locator('input[id="max-time"]').blur();
 
 		// Check error message is displayed
-		await expect(page.locator('text=Maximum time must be greater than minimum time')).toBeVisible();
+		await expect(page.locator("text=Maximum time can't be less than minimum time")).toBeVisible();
 
 		// Check that start button is disabled
 		await expect(page.locator('button:has-text("Begin Practice")')).toBeDisabled();
@@ -93,9 +148,6 @@ test.describe('Meditation Timer', () => {
 		// Start the timer
 		await page.locator('button:has-text("Begin Practice")').click();
 
-		// Wait for completion (plus buffer)
-		await page.waitForTimeout(1500);
-
 		// Check completion interface
 		await expect(page.locator('text=Practice Complete')).toBeVisible();
 		await expect(page.locator('text=Total time:')).toBeVisible();
@@ -126,5 +178,72 @@ test.describe('Meditation Timer', () => {
 
 		// Verify we can still end practice
 		await expect(page.locator('button:has-text("End Practice")')).toBeVisible();
+	});
+
+	test('wake lock is requested during timer start', async ({ page }) => {
+		// Setup wake lock mock and navigate
+		await setupWakeLockMock(page);
+		await page.goto('/');
+
+		// Start the timer
+		await page.locator('button:has-text("Begin Practice")').click();
+
+		// Check that wake lock was requested
+		const state1 = await getWakeLockState(page);
+		expect(state1.wakeLockRequested).toBe(true);
+
+		// Stop the timer
+		await page.locator('button:has-text("End Practice")').click();
+
+		// Check that wake lock was released
+		const state2 = await getWakeLockState(page);
+		expect(state2.wakeLockReleased).toBe(true);
+	});
+
+	test('wake lock is released on timer completion', async ({ page }) => {
+		// Setup wake lock mock and navigate
+		await setupWakeLockMock(page);
+		await page.goto('/');
+
+		// Set very short timer for completion testing
+		await page.locator('input[id="min-time"]').fill('0:01');
+		await page.locator('input[id="max-time"]').fill('0:01');
+		await page.locator('input[id="max-time"]').blur();
+
+		// Start the timer
+		await page.locator('button:has-text("Begin Practice")').click();
+
+		// Verify wake lock was requested
+		const state1 = await getWakeLockState(page);
+		expect(state1.wakeLockRequested).toBe(true);
+
+		// Wait for completion
+		await page.waitForTimeout(1500);
+		await expect(page.locator('text=Practice Complete')).toBeVisible();
+
+		// Check that wake lock was released on completion
+		const state2 = await getWakeLockState(page);
+		expect(state2.wakeLockReleased).toBe(true);
+	});
+
+	test('gracefully handles unsupported wake lock API', async ({ page }) => {
+		// Remove wake lock API to simulate unsupported browser
+		await page.addInitScript(() => {
+			Object.defineProperty(globalThis.navigator, 'wakeLock', {
+				value: undefined,
+				configurable: true
+			});
+		});
+
+		// Start timer - should work without wake lock
+		await page.locator('button:has-text("Begin Practice")').click();
+
+		// Timer should still function normally
+		await expect(page.locator('.elapsed-time')).toBeVisible();
+		await expect(page.locator('button:has-text("End Practice")')).toBeVisible();
+
+		// Stop timer - should work without errors
+		await page.locator('button:has-text("End Practice")').click();
+		await expect(page.locator('button:has-text("Begin Practice")')).toBeVisible();
 	});
 });
