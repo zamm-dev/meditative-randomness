@@ -45,13 +45,15 @@ src/
 │   │   │   ├── DriftingParticles.svelte     # Organic particle system
 │   │   │   └── BreathingContainer.svelte    # Subtle breathing animation wrapper
 │   │   ├── timer/                   # Meditation timer components
-│   │   │   └── MeditationTimer.svelte       # Random meditation timer with MM:SS inputs
+│   │   │   ├── MeditationTimer.svelte       # Random meditation timer with MM:SS inputs
+│   │   │   └── MeditationHistory.svelte     # Meditation session history display
 │   │   └── ui/
 │   │       └── MeditativeCard.svelte        # Glass-morphism card component
 │   ├── utils/
 │   │   ├── randomness.ts            # Controlled randomness utilities
 │   │   ├── timer.ts                 # Time parsing, formatting, and validation utilities
-│   │   └── wake-lock.ts             # Sleep prevention utilities
+│   │   ├── wake-lock.ts             # Sleep prevention utilities
+│   │   └── history.ts               # Meditation session history storage and retrieval
 │   └── assets/                      # Static assets
 ├── app.html                         # HTML template with font imports
 └── app.d.ts                         # TypeScript declarations
@@ -159,6 +161,31 @@ The `randomness.ts` utility provides controlled organic variations:
 - `isWakeLockSupported()` - Progressive enhancement with feature detection
 
 **Testing**: Complete Playwright test suite covering all timer functionality including input validation, state transitions, sleep prevention, and completion flow.
+
+### Meditation History System
+
+**MeditationHistory**: A comprehensive history tracking system that records completed meditation sessions and displays them on the completion screen.
+
+**Features**:
+
+- Cookie-based session storage with 1-year persistence
+- Display of session end times with timezone information
+- Session duration tracking and formatting
+- Delete functionality with two-stage confirmation (trash icon → confirm/cancel)
+- Layout-stable interface that prevents resizing during interactions
+- Empty state handling for new users
+- Responsive design with proper icon usage from lucide-svelte
+
+**History Utilities**: The `history.ts` module provides complete history management:
+
+- `MeditationRecord` interface for type-safe session data
+- `saveMeditationRecord()` - Store completed sessions with UUID generation
+- `getMeditationHistory()` - Retrieve session history from cookie storage
+- `deleteMeditationRecord()` - Remove specific sessions by ID
+- `formatEndTime()` - Display-friendly time formatting with timezone
+- `formatDuration()` - Human-readable duration formatting (e.g., "5m 30s")
+
+**Design Integration**: The history display uses consistent meditative design language with subtle hover states, proper icon hierarchy, and maintains the calm aesthetic of the overall application.
 
 ### Development Lessons Learned
 
