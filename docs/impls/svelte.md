@@ -53,7 +53,9 @@ src/
 │   │   ├── randomness.ts            # Controlled randomness utilities
 │   │   ├── timer.ts                 # Time parsing, formatting, and validation utilities
 │   │   ├── wake-lock.ts             # Sleep prevention utilities
-│   │   └── history.ts               # Meditation session history storage and retrieval
+│   │   └── history.ts               # Meditation session history storage via localStorage
+│   ├── types/
+│   │   └── browser.ts               # Type re-export helpers for DOM globals
 │   └── assets/                      # Static assets
 ├── app.html                         # HTML template with font imports
 └── app.d.ts                         # TypeScript declarations
@@ -168,7 +170,7 @@ The `randomness.ts` utility provides controlled organic variations:
 
 **Features**:
 
-- Cookie-based session storage with 1-year persistence
+- LocalStorage-based session storage guarded against malformed data
 - Display of session end times with timezone information
 - Session duration tracking and formatting
 - Delete functionality with two-stage confirmation (trash icon → confirm/cancel)
@@ -180,10 +182,11 @@ The `randomness.ts` utility provides controlled organic variations:
 
 - `MeditationRecord` interface for type-safe session data
 - `saveMeditationRecord()` - Store completed sessions with UUID generation
-- `getMeditationHistory()` - Retrieve session history from cookie storage
+- `getMeditationHistory()` - Retrieve session history from `localStorage`
 - `deleteMeditationRecord()` - Remove specific sessions by ID
 - `formatEndTime()` - Display-friendly time formatting with timezone
 - `formatDuration()` - Human-readable duration formatting (e.g., "5m 30s")
+- Returns the stored array as-is after a shallow shape check, logging only when the payload is not an array
 
 **Design Integration**: The history display uses consistent meditative design language with subtle hover states, proper icon hierarchy, and maintains the calm aesthetic of the overall application.
 
