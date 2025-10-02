@@ -19,22 +19,6 @@ function generateId(): string {
 	return globalThis.crypto.randomUUID();
 }
 
-function isValidRecord(record: unknown): record is MeditationRecord {
-	return (
-		record !== null &&
-		typeof record === 'object' &&
-		typeof (record as MeditationRecord).id === 'string' &&
-		typeof (record as MeditationRecord).endTime === 'string' &&
-		typeof (record as MeditationRecord).duration === 'number' &&
-		(record as MeditationRecord).duration > 0
-	);
-}
-
-function normalizeRecords(data: unknown): MeditationRecord[] {
-	if (!Array.isArray(data)) return [];
-	return data.filter(isValidRecord);
-}
-
 function getStorage(): Storage | null {
 	if (typeof globalThis.localStorage === 'undefined') return null;
 
@@ -59,7 +43,13 @@ export function getMeditationHistory(): MeditationRecord[] {
 		const storedData = storage.getItem(HISTORY_STORAGE_KEY);
 		if (!storedData) return [];
 
-		return normalizeRecords(JSON.parse(storedData));
+		const parsed = JSON.parse(storedData);
+		if (!Array.isArray(parsed)) {
+			console.warn('Unexpected meditation history payload shape.');
+			return [];
+		}
+
+		return parsed as MeditationRecord[];
 	} catch (error) {
 		console.warn('Failed to read meditation history from localStorage:', error);
 		return [];
