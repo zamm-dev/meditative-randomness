@@ -1,3 +1,5 @@
+import type { Storage } from '$lib/types/browser';
+
 /**
  * Meditation history utilities for tracking completed sessions
  */
@@ -8,8 +10,10 @@ export interface MeditationRecord {
 	duration: number; // Duration in seconds
 }
 
-const HISTORY_COOKIE_NAME = 'meditation_history';
+const HISTORY_STORAGE_KEY = 'meditation_history';
+const HISTORY_COOKIE_NAME = HISTORY_STORAGE_KEY;
 const COOKIE_EXPIRY_DAYS = 365; // 1 year
+const MAX_COOKIE_SIZE = 4096;
 
 /**
  * Generate a unique ID for meditation records
@@ -18,11 +22,24 @@ function generateId(): string {
 	return globalThis.crypto.randomUUID();
 }
 
-/**
- * Get meditation history from browser cookies
- */
-export function getMeditationHistory(): MeditationRecord[] {
-	if (typeof globalThis.document === 'undefined') return []; // SSR safety
+function isValidRecord(record: unknown): record is MeditationRecord {
+	return (
+		record !== null &&
+		typeof record === 'object' &&
+		typeof (record as MeditationRecord).id === 'string' &&
+		typeof (record as MeditationRecord).endTime === 'string' &&
+		typeof (record as MeditationRecord).duration === 'number' &&
+		(record as MeditationRecord).duration > 0
+	);
+}
+
+function normalizeRecords(data: unknown): MeditationRecord[] {
+	if (!Array.isArray(data)) return [];
+	return data.filter(isValidRecord);
+}
+
+function readHistoryFromCookie(): MeditationRecord[] {
+	if (typeof globalThis.document === 'undefined') return [];
 
 	try {
 		const cookies = globalThis.document.cookie.split(';');
@@ -33,43 +50,110 @@ export function getMeditationHistory(): MeditationRecord[] {
 		if (!historyCookie) return [];
 
 		const decodedData = decodeURIComponent(historyCookie);
-		const records = JSON.parse(decodedData);
-
-		// Validate records structure
-		if (!Array.isArray(records)) return [];
-
-		return records.filter(
-			(record): record is MeditationRecord =>
-				record &&
-				typeof record.id === 'string' &&
-				typeof record.endTime === 'string' &&
-				typeof record.duration === 'number' &&
-				record.duration > 0
-		);
+		return normalizeRecords(JSON.parse(decodedData));
 	} catch (error) {
-		console.warn('Failed to parse meditation history:', error);
+		console.warn('Failed to read meditation history from cookie:', error);
 		return [];
 	}
 }
 
+function clearHistoryCookie() {
+	if (typeof globalThis.document === 'undefined') return;
+
+	globalThis.document.cookie = `${HISTORY_COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Strict`;
+}
+
+function getStorage(): Storage | null {
+	if (typeof globalThis.localStorage === 'undefined') return null;
+
+	try {
+		return globalThis.localStorage;
+	} catch (error) {
+		console.warn('Unable to access localStorage for meditation history:', error);
+		return null;
+	}
+}
+
+function migrateCookieToLocalStorage(storage: Storage) {
+	const existingStorage = storage.getItem(HISTORY_STORAGE_KEY);
+	if (existingStorage) return; // Already migrated
+
+	const cookieRecords = readHistoryFromCookie();
+	if (cookieRecords.length === 0) return;
+
+	try {
+		storage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(cookieRecords));
+		clearHistoryCookie();
+	} catch (error) {
+		console.warn('Failed to migrate meditation history to localStorage:', error);
+	}
+}
+
 /**
- * Save meditation history to browser cookies
+ * Get meditation history from localStorage (with cookie migration fallback)
  */
-function saveMeditationHistory(records: MeditationRecord[]): void {
-	if (typeof globalThis.document === 'undefined') return; // SSR safety
+export function getMeditationHistory(): MeditationRecord[] {
+	if (typeof globalThis.document === 'undefined') return []; // SSR safety
+
+	const storage = getStorage();
+	if (storage) {
+		migrateCookieToLocalStorage(storage);
+
+		try {
+			const storedData = storage.getItem(HISTORY_STORAGE_KEY);
+			if (storedData) {
+				const parsed = normalizeRecords(JSON.parse(storedData));
+				if (parsed.length > 0) {
+					return parsed;
+				}
+			}
+		} catch (error) {
+			console.warn('Failed to read meditation history from localStorage:', error);
+		}
+	}
+
+	return readHistoryFromCookie();
+}
+
+function saveHistoryToCookie(records: MeditationRecord[]): void {
+	if (typeof globalThis.document === 'undefined') return;
 
 	try {
 		const data = JSON.stringify(records);
 		const encodedData = encodeURIComponent(data);
 
-		// Set cookie with expiration
+		if (encodedData.length > MAX_COOKIE_SIZE) {
+			console.warn('Skipping meditation history cookie update because it exceeds the size limit.');
+			return;
+		}
+
 		const expiryDate = new Date();
 		expiryDate.setDate(expiryDate.getDate() + COOKIE_EXPIRY_DAYS);
 
 		globalThis.document.cookie = `${HISTORY_COOKIE_NAME}=${encodedData}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
 	} catch (error) {
-		console.warn('Failed to save meditation history:', error);
+		console.warn('Failed to save meditation history cookie:', error);
 	}
+}
+
+/**
+ * Save meditation history to storage
+ */
+function saveMeditationHistory(records: MeditationRecord[]): void {
+	if (typeof globalThis.document === 'undefined') return; // SSR safety
+
+	const storage = getStorage();
+	if (storage) {
+		try {
+			storage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(records));
+			clearHistoryCookie();
+			return;
+		} catch (error) {
+			console.warn('Failed to save meditation history to localStorage:', error);
+		}
+	}
+
+	saveHistoryToCookie(records);
 }
 
 /**
