@@ -135,3 +135,142 @@ export function formatDuration(seconds: number): string {
 
 	return `${minutes}m ${remainingSeconds}s`;
 }
+
+/**
+ * Export format for meditation history
+ */
+export interface ExportData {
+	version: string;
+	exportDate: string;
+	records: MeditationRecord[];
+}
+
+/**
+ * Validation result for import operations
+ */
+export interface ImportResult {
+	success: boolean;
+	importedCount: number;
+	errorMessage?: string;
+}
+
+/**
+ * Export meditation history to JSON
+ */
+export function exportMeditationHistory(): ExportData {
+	const records = getMeditationHistory();
+	return {
+		version: '1.0',
+		exportDate: new Date().toISOString(),
+		records
+	};
+}
+
+/**
+ * Generate filename for export with current date
+ */
+export function generateExportFilename(): string {
+	const date = new Date();
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	return `meditation-history-${year}-${month}-${day}.json`;
+}
+
+/**
+ * Validate a meditation record
+ */
+function isValidMeditationRecord(record: unknown): record is MeditationRecord {
+	if (typeof record !== 'object' || record === null) return false;
+
+	const r = record as Record<string, unknown>;
+
+	// Check id
+	if (typeof r.id !== 'string' || r.id.trim() === '') return false;
+
+	// Check endTime - must be valid ISO 8601
+	if (typeof r.endTime !== 'string') return false;
+	const date = new Date(r.endTime);
+	if (isNaN(date.getTime())) return false;
+
+	// Check duration - must be positive number
+	if (typeof r.duration !== 'number' || r.duration <= 0 || !Number.isInteger(r.duration))
+		return false;
+
+	return true;
+}
+
+/**
+ * Import meditation history from JSON data
+ * Returns result with success status and count of imported records
+ */
+export function importMeditationHistory(jsonData: string): ImportResult {
+	try {
+		// Parse JSON
+		const parsed = JSON.parse(jsonData);
+
+		// Validate structure
+		if (typeof parsed !== 'object' || parsed === null) {
+			return {
+				success: false,
+				importedCount: 0,
+				errorMessage: 'The file does not contain valid meditation history data'
+			};
+		}
+
+		if (!Array.isArray(parsed.records)) {
+			return {
+				success: false,
+				importedCount: 0,
+				errorMessage: 'The file does not contain valid meditation history data'
+			};
+		}
+
+		// Get existing records
+		const existingRecords = getMeditationHistory();
+		const existingIds = new Set(existingRecords.map((r) => r.id));
+
+		// Validate and filter new records
+		const newRecords: MeditationRecord[] = [];
+		for (const record of parsed.records) {
+			if (!isValidMeditationRecord(record)) {
+				console.warn('Skipping invalid record during import:', record);
+				continue;
+			}
+
+			// Skip duplicates
+			if (existingIds.has(record.id)) {
+				continue;
+			}
+
+			newRecords.push(record);
+		}
+
+		// Merge and save
+		if (newRecords.length > 0) {
+			const allRecords = [...existingRecords, ...newRecords];
+			// Sort by end time, newest first
+			allRecords.sort((a, b) => new Date(b.endTime).getTime() - new Date(a.endTime).getTime());
+			saveMeditationHistory(allRecords);
+		}
+
+		return {
+			success: true,
+			importedCount: newRecords.length
+		};
+	} catch (error) {
+		if (error instanceof SyntaxError) {
+			return {
+				success: false,
+				importedCount: 0,
+				errorMessage: 'The selected file is not a valid JSON file'
+			};
+		}
+
+		return {
+			success: false,
+			importedCount: 0,
+			errorMessage: 'Failed to read the selected file'
+		};
+	}
+}

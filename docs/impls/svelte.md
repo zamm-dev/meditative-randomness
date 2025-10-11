@@ -190,6 +190,23 @@ The `randomness.ts` utility provides controlled organic variations:
 
 **Design Integration**: The history display uses consistent meditative design language with subtle hover states, proper icon hierarchy, and maintains the calm aesthetic of the overall application.
 
+### Import/Export System
+
+**Import/Export Functionality**: The `history.ts` module provides complete import/export capabilities for meditation session data.
+
+**Export Utilities**: The module provides functions for generating exports and filenames:
+
+- `exportMeditationHistory()` - Creates export data structure with version info
+- `generateExportFilename()` - Generates filename with current date: `meditation-history-YYYY-MM-DD.json`
+- `importMeditationHistory()` - Validates and merges imported records with existing data
+- `isValidMeditationRecord()` - Type guard for record validation
+
+**UI Integration**: Export and Import buttons are available in the MeditationHistory component, visible in both idle and completed timer states. Uses lucide-svelte icons (Download, Upload) and displays status messages with 5-second auto-dismiss.
+
+**Browser API Usage**: File operations use `globalThis.Blob`, `globalThis.URL`, and `globalThis.document` prefixes to satisfy ESLint globals requirements without disabling rules.
+
+**Testing**: Playwright tests use Node.js `fs` module combined with browser file chooser/download events to verify import/export functionality end-to-end.
+
 ### Development Lessons Learned
 
 **Critical guidance from implementation experience that must be followed:**

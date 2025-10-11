@@ -189,6 +189,8 @@
 				{#if !isValidRange && minTime && maxTime}
 					<div class="error-message">Maximum time can't be less than minimum time</div>
 				{/if}
+
+				<MeditationHistory />
 			</div>
 		{:else if timerState === 'running'}
 			<div class="timer-active">
