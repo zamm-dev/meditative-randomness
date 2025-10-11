@@ -1,10 +1,16 @@
 # Implement the latest spec changes
 
-1. Run the command `eza . --tree --git-ignore` to understand the entire project structure
-2. Run the command `git diff main` to understand the latest requested spec changes and the plan for implementing them
-3. Implement. As you go, make note of any unexpected errors and surprises you encounter. Make sure to run tests and **commit** at the end of each phase of the plan.
-4. Run `zamm impl record <ref-impl> --last-n-commits <N>` where `<N>` is the total number of commits you've made and `<ref-impl>` is the reference implementation plan ID or file path
-5. Update the Markdown plan file (the one in `impl-history/`) with any surprises, errors, and results from implementation, including any guidance the user provided along the way for you to end up with the final product.
-6. Update `docs/impls/` as appropriate with **concise** updates to implementation-specific development documentation (e.g. changes to project structure, dev commands, or anything else of note to future LLM agents working on this project). If there is nothing to update about the project from a development standpoint, then you may skip this step. You should **never** duplicate feature documentation in this step -- that information belongs in the specs in `docs/`.
-7. Update the original spec as appropriate with new requirements learned during implementation. This should be things that were originally left underspecified in the original spec, and that will be useful to all future implementors of the spec (as opposed to those working on just the current implementation of the spec).
-8. Commit again (if needed)
+We are going to implement changes to the spec on the project implementation described at @docs/impls/svelte.md . Use the TodoWrite tool to track progress through the below steps.
+
+## Core Implementation Steps
+
+1. **Spec Analysis**: Run `git diff main` to understand the latest requested spec changes and implementation requirements
+2. **Implementation**: Implement the specification following development best practices (see guidelines below). When user provides feedback that requires changes, immediately run `git add` to stage the changes before committing.
+3. **Testing**: Run tests before committing. For workflow/script changes, run E2E tests as well. If tests fail, investigate thoroughly - assume all tests were passing before you started. If you are really convinced that the failures are not due to your changes, prove it with `git stash`.
+4. **Code Commit**: ALWAYS commit the implementation code changes at the end. You may even commit multiple times if there are natural checkpoints to do so at during development.
+
+## User Collaboration Guidelines
+
+- Ask for clarification on underspecified requirements
+
+Keep in mind @.claude/software-dev-guidelines.md
