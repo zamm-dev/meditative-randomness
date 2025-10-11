@@ -139,29 +139,32 @@
 		<div class="history-list">
 			{#each history as record (record.id)}
 				<div class="history-item">
-					<div class="record-info">
-						<div class="record-time">{formatEndTime(record.endTime)}</div>
+					<div class="record-time">{formatEndTime(record.endTime)}</div>
+					<div class="record-right">
 						<div class="record-duration">{formatDuration(record.duration)}</div>
-					</div>
-					<div class="record-actions">
-						{#if deleteConfirmId === record.id}
-							<button
-								onclick={() => handleDelete(record.id)}
-								class="confirm-button"
-								title="Confirm Delete"
-							>
-								<Check size={16} />
-							</button>
-							<button onclick={cancelDelete} class="cancel-button" title="Cancel">
-								<X size={16} />
-							</button>
-						{:else}
-							<div style="flex: 1;"></div>
-							<button onclick={() => handleDelete(record.id)} class="delete-button" title="Delete">
-								<Trash2 size={16} />
-							</button>
-							<div class="placeholder-button"></div>
-						{/if}
+						<div class="record-actions">
+							{#if deleteConfirmId === record.id}
+								<button
+									onclick={() => handleDelete(record.id)}
+									class="confirm-button"
+									title="Confirm Delete"
+								>
+									<Check size={16} />
+								</button>
+								<button onclick={cancelDelete} class="cancel-button" title="Cancel">
+									<X size={16} />
+								</button>
+							{:else}
+								<button
+									onclick={() => handleDelete(record.id)}
+									class="delete-button"
+									title="Delete"
+								>
+									<Trash2 size={16} />
+								</button>
+								<div class="placeholder-button"></div>
+							{/if}
+						</div>
 					</div>
 				</div>
 			{/each}
@@ -307,20 +310,20 @@
 		border-color: rgba(168, 198, 134, 0.3);
 	}
 
-	.record-info {
-		margin-left: 40px;
-		display: flex;
-		align-items: center;
-		gap: var(--space-4);
-		flex-grow: 1;
-		min-width: 0; /* Allow text to wrap properly */
-	}
-
 	.record-time {
+		margin-left: 30px;
 		font-size: var(--text-sm);
 		color: var(--color-neutral-dark);
 		font-weight: var(--font-weight-medium);
-		flex-shrink: 0;
+		flex: 1;
+		min-width: 0; /* Allow text to wrap properly */
+		text-align: left;
+	}
+
+	.record-right {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
 	}
 
 	.record-duration {
@@ -333,7 +336,6 @@
 
 	.record-actions {
 		opacity: 0;
-		margin-left: 5px;
 		display: flex;
 		gap: 2px;
 		align-items: center;
@@ -401,13 +403,9 @@
 			gap: var(--space-2);
 		}
 
-		.record-actions {
-			align-self: stretch;
-			justify-content: flex-end;
-		}
-
-		.record-info {
+		.record-right {
 			width: 100%;
+			justify-content: space-between;
 		}
 	}
 
