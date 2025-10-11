@@ -194,14 +194,6 @@ The `randomness.ts` utility provides controlled organic variations:
 
 **Import/Export Functionality**: The `history.ts` module provides complete import/export capabilities for meditation session data.
 
-**Features**:
-
-- Export to JSON with versioned format including metadata (version, exportDate, records array)
-- Import with validation and duplicate detection (prevents re-importing same records by ID)
-- Automatic sorting by end time after import (newest first)
-- Comprehensive validation of record structure, ISO 8601 dates, and positive integer durations
-- User-friendly error messages for invalid files, malformed JSON, or missing required fields
-
 **Export Utilities**: The module provides functions for generating exports and filenames:
 
 - `exportMeditationHistory()` - Creates export data structure with version info
