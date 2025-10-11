@@ -71,7 +71,7 @@ The import functionality should allow users to upload a previously exported JSON
 - Both import and export buttons should be placed in the meditation history section
 - Buttons should be clearly labeled "Export History" and "Import History"
 - Consider placing them together in a toolbar or action area above or below the history list
-- Buttons should be accessible even when the history list is empty
+- Buttons must be accessible in all application states where history is visible, including both empty history and active meditation states
 
 ## Error Handling
 
