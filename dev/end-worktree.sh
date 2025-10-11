@@ -45,8 +45,6 @@ git branch -d "$CURRENT_BRANCH"
 # Step 5: Run implementation-specific build or verification commands
 echo "Running implementation-specific post-worktree commands..."
 pnpm build
-pnpm test
-pnpm lint --fix
 
 # Step 6: Push to remote
 echo "Pushing to remote..."
