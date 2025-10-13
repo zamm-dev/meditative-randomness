@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Trash2, Check, X, Download, Upload, ChevronRight } from 'lucide-svelte';
+	import { slide } from 'svelte/transition';
 	import {
 		getMeditationHistory,
 		deleteMeditationRecord,
@@ -157,7 +158,7 @@
 					</button>
 
 					{#if expandedDates[group.date]}
-						<div class="date-group-records">
+						<div class="date-group-records" transition:slide={{ duration: 300 }}>
 							{#each group.records as record (record.id)}
 								<div class="history-item">
 									<div class="record-time">{formatEndTime(record.endTime)}</div>
