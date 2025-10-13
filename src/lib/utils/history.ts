@@ -137,6 +137,65 @@ export function formatDuration(seconds: number): string {
 }
 
 /**
+ * Get the date string (YYYY-MM-DD) from an ISO timestamp
+ */
+export function getDateString(endTime: string): string {
+	const date = new Date(endTime);
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+}
+
+/**
+ * Format date for display
+ */
+export function formatDate(dateString: string): string {
+	const [year, month, day] = dateString.split('-');
+	const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+	return date.toLocaleDateString(undefined, {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric'
+	});
+}
+
+/**
+ * Grouped meditation records by date
+ */
+export interface DateGroup {
+	date: string; // YYYY-MM-DD format
+	totalDuration: number; // Total seconds for that day
+	records: MeditationRecord[];
+}
+
+/**
+ * Group meditation records by date
+ */
+export function groupRecordsByDate(records: MeditationRecord[]): DateGroup[] {
+	const groups = new Map<string, DateGroup>();
+
+	for (const record of records) {
+		const dateString = getDateString(record.endTime);
+
+		if (!groups.has(dateString)) {
+			groups.set(dateString, {
+				date: dateString,
+				totalDuration: 0,
+				records: []
+			});
+		}
+
+		const group = groups.get(dateString)!;
+		group.totalDuration += record.duration;
+		group.records.push(record);
+	}
+
+	// Convert to array and sort by date (newest first)
+	return Array.from(groups.values()).sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/**
  * Export format for meditation history
  */
 export interface ExportData {

@@ -1,31 +1,35 @@
 <script lang="ts">
-	import { Trash2, Check, X, Download, Upload } from 'lucide-svelte';
+	import { Trash2, Check, X, Download, Upload, ChevronRight } from 'lucide-svelte';
+	import { slide } from 'svelte/transition';
 	import {
 		getMeditationHistory,
 		deleteMeditationRecord,
 		formatEndTime,
 		formatDuration,
+		formatDate,
+		groupRecordsByDate,
+		type MeditationRecord,
 		exportMeditationHistory,
 		generateExportFilename,
-		importMeditationHistory,
-		type MeditationRecord
+		importMeditationHistory
 	} from '$lib/utils/history';
 
-	let history = $state<MeditationRecord[]>([]);
+	let history = $state<MeditationRecord[]>(getMeditationHistory());
+	let dateGroups = $derived(groupRecordsByDate(history));
+	let expandedDates = $state<Record<string, boolean>>({});
 	let deleteConfirmId = $state<string | null>(null);
 	let statusMessage = $state<{ text: string; type: 'success' | 'error' } | null>(null);
 	let fileInputRef: HTMLInputElement | undefined = $state();
 
-	// Load history on component mount
-	$effect(() => {
-		history = getMeditationHistory();
-	});
+	function toggleDateGroup(date: string) {
+		expandedDates = { ...expandedDates, [date]: !expandedDates[date] };
+	}
 
 	function handleDelete(id: string) {
 		if (deleteConfirmId === id) {
 			// Confirm deletion
 			deleteMeditationRecord(id);
-			history = getMeditationHistory(); // Refresh the list
+			history = getMeditationHistory(); // Refresh the list (dateGroups will auto-update)
 			deleteConfirmId = null;
 		} else {
 			// Show confirmation
@@ -69,7 +73,7 @@
 			const result = importMeditationHistory(text);
 
 			if (result.success) {
-				history = getMeditationHistory(); // Refresh the list
+				history = getMeditationHistory(); // Refresh the list (dateGroups will auto-update)
 				if (result.importedCount === 0) {
 					showStatus('No new records to import', 'success');
 				} else {
@@ -137,35 +141,57 @@
 		</div>
 	{:else}
 		<div class="history-list">
-			{#each history as record (record.id)}
-				<div class="history-item">
-					<div class="record-time">{formatEndTime(record.endTime)}</div>
-					<div class="record-right">
-						<div class="record-duration">{formatDuration(record.duration)}</div>
-						<div class="record-actions">
-							{#if deleteConfirmId === record.id}
-								<button
-									onclick={() => handleDelete(record.id)}
-									class="confirm-button"
-									title="Confirm Delete"
-								>
-									<Check size={16} />
-								</button>
-								<button onclick={cancelDelete} class="cancel-button" title="Cancel">
-									<X size={16} />
-								</button>
-							{:else}
-								<button
-									onclick={() => handleDelete(record.id)}
-									class="delete-button"
-									title="Delete"
-								>
-									<Trash2 size={16} />
-								</button>
-								<div class="placeholder-button"></div>
-							{/if}
+			{#each dateGroups as group (group.date)}
+				<div class="date-group">
+					<button
+						onclick={() => toggleDateGroup(group.date)}
+						class="date-group-header"
+						class:expanded={expandedDates[group.date]}
+					>
+						<div class="date-group-info">
+							<div class="date-group-date">{formatDate(group.date)}</div>
+							<div class="date-group-total">{formatDuration(group.totalDuration)}</div>
 						</div>
-					</div>
+						<div class="date-group-icon">
+							<ChevronRight size={16} />
+						</div>
+					</button>
+
+					{#if expandedDates[group.date]}
+						<div class="date-group-records" transition:slide={{ duration: 300 }}>
+							{#each group.records as record (record.id)}
+								<div class="history-item">
+									<div class="record-time">{formatEndTime(record.endTime)}</div>
+									<div class="record-right">
+										<div class="record-duration">{formatDuration(record.duration)}</div>
+										<div class="record-actions">
+											{#if deleteConfirmId === record.id}
+												<button
+													onclick={() => handleDelete(record.id)}
+													class="confirm-button"
+													title="Confirm Delete"
+												>
+													<Check size={16} />
+												</button>
+												<button onclick={cancelDelete} class="cancel-button" title="Cancel">
+													<X size={16} />
+												</button>
+											{:else}
+												<button
+													onclick={() => handleDelete(record.id)}
+													class="delete-button"
+													title="Delete"
+												>
+													<Trash2 size={16} />
+												</button>
+												<div class="placeholder-button"></div>
+											{/if}
+										</div>
+									</div>
+								</div>
+							{/each}
+						</div>
+					{/if}
 				</div>
 			{/each}
 		</div>
@@ -292,6 +318,80 @@
 		gap: var(--space-3);
 		max-height: 300px;
 		overflow-y: auto;
+	}
+
+	.date-group {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.date-group-header {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-3);
+		background: rgba(255, 255, 255, 0.8);
+		border: 1px solid rgba(168, 198, 134, 0.25);
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		transition: all var(--duration-normal) var(--ease-out);
+		width: 100%;
+		text-align: left;
+	}
+
+	.date-group-header:hover {
+		background: rgba(255, 255, 255, 1);
+		border-color: rgba(168, 198, 134, 0.4);
+		transform: translateY(-1px);
+	}
+
+	.date-group-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-neutral-dark);
+		opacity: 0;
+		transition: all var(--duration-normal) var(--ease-out);
+		transform: rotate(0deg);
+	}
+
+	.date-group-header:hover .date-group-icon {
+		opacity: 0.6;
+	}
+
+	.date-group-header.expanded .date-group-icon {
+		transform: rotate(90deg);
+		opacity: 0.6;
+	}
+
+	.date-group-info {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex: 1;
+		gap: var(--space-3);
+	}
+
+	.date-group-date {
+		margin-left: 20px;
+		font-size: var(--text-base);
+		font-weight: var(--font-weight-medium);
+		color: var(--color-green-deep);
+	}
+
+	.date-group-total {
+		font-size: var(--text-base);
+		font-weight: var(--font-weight-medium);
+		color: var(--color-blue-deep);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.date-group-records {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+		padding-left: var(--space-6);
 	}
 
 	.history-item {

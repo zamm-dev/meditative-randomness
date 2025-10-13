@@ -3,10 +3,10 @@ id: LNW387
 type: ref-impl
 specs:
   - id: XCN825
-    path: /docs/specs/project-setup.md
+    path: /specs/project-setup.md
 impl:
   id: KIT939
-  path: /docs/impls/svelte.md
+  path: /impls/svelte.md
 commits:
   - sha: 86c36c84506fea28cf08cb7f72d80f2028d15cda
     message: Add lock file changes

@@ -12,5 +12,7 @@ We are going to implement changes to the spec on the project implementation desc
 ## User Collaboration Guidelines
 
 - Ask for clarification on underspecified requirements
+- **NEVER claim something works without testing it first** - if a manual test is needed, then wait for user confirmation. Do not claim it manually works if you did not in fact manually test it.
+- This goes for bug fixes too. When the user reports buggy behavior, don't assume your changes fixed the issue until the behavior is verifiably fixed in a test or manually verified by the user
 
 Keep in mind @.claude/software-dev-guidelines.md

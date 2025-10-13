@@ -3,10 +3,10 @@ id: DRY673
 type: ref-impl
 specs:
   - id: VCR269
-    path: /docs/specs/theming.md
+    path: /specs/theming.md
 impl:
   id: KIT939
-  path: /docs/impls/svelte.md
+  path: /impls/svelte.md
 commits:
   - sha: 88d53ef88de8c2bfbb27e10a20074393486f023f
     message: Fix stuttering issues with breathing animation
