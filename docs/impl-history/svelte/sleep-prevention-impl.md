@@ -3,10 +3,10 @@ id: YEA188
 type: ref-impl
 specs:
   - id: GFP929
-    path: /docs/specs/sleep.md
+    path: /specs/sleep.md
 impl:
   id: KIT939
-  path: /docs/impls/svelte.md
+  path: /impls/svelte.md
 commits:
   - sha: 8531a5f9a54f498c330dabeb026aa42faaa4cc28
     message: Implement sleep prevention during meditation timer

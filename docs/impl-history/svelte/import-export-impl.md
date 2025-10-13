@@ -3,7 +3,7 @@ id: ARN348
 type: ref-impl
 specs:
   - id: QKJ093
-    path: /specs/import-export.md
+    path: /spec-history/import-export.md
 impl:
   id: KIT939
   path: /impls/svelte.md

@@ -3,10 +3,10 @@ id: JAX429
 type: ref-impl
 specs:
   - id: UGX879
-    path: /docs/specs/history.md
+    path: /specs/history.md
 impl:
   id: KIT939
-  path: /docs/impls/svelte.md
+  path: /impls/svelte.md
 commits:
   - sha: 0782f27a7ef0a8e294dd077a5051a3813fad3c7e
     message: Prevent layout shift in meditation history button actions

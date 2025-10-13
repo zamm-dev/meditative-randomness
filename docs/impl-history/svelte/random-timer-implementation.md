@@ -3,10 +3,10 @@ id: SRX615
 type: ref-impl
 specs:
   - id: FQP740
-    path: /docs/specs/random-timer.md
+    path: /specs/random-timer.md
 impl:
   id: KIT939
-  path: /docs/impls/svelte.md
+  path: /impls/svelte.md
 commits:
   - sha: 0ad92e0aa108288ebde9afd1250a680621fbaa2f
     message: Complete random meditation timer implementation
