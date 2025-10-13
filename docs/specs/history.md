@@ -20,7 +20,7 @@ History entries should be grouped by date. Each grouped entry displays:
 - The total time spent meditating on that day
 - A decorative `>` icon on hover indicating there are more entries to view
 
-Clicking on a grouped entry expands it to show the usual list of individual entries for that date. Grouped entries themselves should not have delete controls - only the individual entries within them.
+Clicking on a grouped entry expands it to show the usual list of individual entries for that date with a smooth slide animation. Grouped entries themselves should not have delete controls - only the individual entries within them.
 
 ## Individual Entries
 

@@ -186,9 +186,11 @@ The `randomness.ts` utility provides controlled organic variations:
 - `deleteMeditationRecord()` - Remove specific sessions by ID
 - `formatEndTime()` - Display-friendly time formatting with timezone
 - `formatDuration()` - Human-readable duration formatting (e.g., "5m 30s")
+- `getDateString()` - Extract YYYY-MM-DD from ISO timestamp
+- `formatDate()` - Format date for display using browser locale
+- `groupRecordsByDate()` - Group records by date with totals, sorted newest first
+- `DateGroup` interface with `date`, `totalDuration`, and `records` fields
 - Returns the stored array as-is after a shallow shape check, logging only when the payload is not an array
-
-**Design Integration**: The history display uses consistent meditative design language with subtle hover states, proper icon hierarchy, and maintains the calm aesthetic of the overall application.
 
 ### Import/Export System
 
@@ -242,6 +244,13 @@ The `randomness.ts` utility provides controlled organic variations:
 - When buttons are unclickable, check if they're disabled due to validation rather than using force clicks
 - Test one thing at a time when debugging - don't run all tests and get overwhelmed
 - Read error messages carefully and address the actual issue, not symptoms
+
+**Svelte 5 Reactivity:**
+
+- Use `$derived` for computed state instead of `$effect` that writes to state - prevents infinite loops
+- Use object/array types (`Record<string, boolean>`) instead of `Set` for reactive collections
+- Replace objects/arrays immutably (spread syntax) to trigger reactivity
+- Don't manually sync derived state - let `$derived` handle it automatically
 
 **Playwright Specific:**
 
