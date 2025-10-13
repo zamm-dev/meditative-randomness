@@ -2,6 +2,8 @@
 id: PKE454
 type: spec
 commits:
+  - sha: 345035ba3ffd6b2f8c3ac09fb2b6e6d6e17d2b04
+    message: Document date grouping implementation
   - sha: 858af22655929dc3e13644e60c37af8913f81755
     message: Add date grouping to meditation history spec
 ---
