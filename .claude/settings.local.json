@@ -27,7 +27,8 @@
 			"Bash(pnpm exec playwright test:*)",
 			"WebSearch",
 			"Bash(pnpm exec tsc:*)",
-			"Bash(sed:*)"
+			"Bash(sed:*)",
+			"Bash(pnpm install)"
 		],
 		"deny": [],
 		"ask": []

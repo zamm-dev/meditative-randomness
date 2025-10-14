@@ -21,6 +21,12 @@
 	let statusMessage = $state<{ text: string; type: 'success' | 'error' } | null>(null);
 	let fileInputRef: HTMLInputElement | undefined = $state();
 
+	// Respect prefers-reduced-motion for slide animation
+	const prefersReducedMotion =
+		typeof globalThis.window !== 'undefined' &&
+		globalThis.window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const slideDuration = prefersReducedMotion ? 0 : 300;
+
 	function toggleDateGroup(date: string) {
 		expandedDates = { ...expandedDates, [date]: !expandedDates[date] };
 	}
@@ -158,7 +164,7 @@
 					</button>
 
 					{#if expandedDates[group.date]}
-						<div class="date-group-records" transition:slide={{ duration: 300 }}>
+						<div class="date-group-records" transition:slide={{ duration: slideDuration }}>
 							{#each group.records as record (record.id)}
 								<div class="history-item">
 									<div class="record-time">{formatEndTime(record.endTime)}</div>
