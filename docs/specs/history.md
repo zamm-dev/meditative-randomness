@@ -22,6 +22,9 @@ History entries should be grouped by date. Each grouped entry displays:
 
 Clicking on a grouped entry expands it to show the usual list of individual entries for that date with a smooth slide animation. Grouped entries themselves should not have delete controls - only the individual entries within them.
 
+> [!NOTE]
+> You should set `prefers-reduced-motion` during testing and ensure that the animation code respects this preference, or else tests may be flaky.
+
 ## Individual Entries
 
 Individual meditation records are shown when a grouped entry is expanded. Each individual entry displays the meditation end time and duration, with delete controls available.
