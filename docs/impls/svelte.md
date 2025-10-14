@@ -252,6 +252,13 @@ The `randomness.ts` utility provides controlled organic variations:
 - Replace objects/arrays immutably (spread syntax) to trigger reactivity
 - Don't manually sync derived state - let `$derived` handle it automatically
 
+**Svelte Transitions and Accessibility:**
+
+- Svelte's built-in transitions (like `slide`) do NOT automatically respect `prefers-reduced-motion`
+- Manually check the media query and set duration to 0 when reduced motion is preferred: `const prefersReducedMotion = typeof globalThis.window !== 'undefined' && globalThis.window.matchMedia('(prefers-reduced-motion: reduce)').matches`
+- Pass the computed duration to transitions: `transition:slide={{ duration: prefersReducedMotion ? 0 : 300 }}`
+- This prevents flaky tests that set `reducedMotion: 'reduce'` via `page.emulateMedia()`
+
 **Playwright Specific:**
 
 - The `reducedMotion` option doesn't exist in Playwright config
