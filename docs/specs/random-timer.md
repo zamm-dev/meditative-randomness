@@ -44,4 +44,6 @@ The main meditation div (central content area) must maintain a consistent fixed 
 
 The fixed width should be responsive and relative to the browser window size. It should have a maximum width, but if the browser window gets smaller (e.g. on mobile), its width should similarly be constrained by the browser window width so as to not require horizontal scrolling.
 
--
+## Testing
+
+When testing the meditation timer functionality, ensure that sound playback is disabled. Tests should verify the timer behavior and completion logic without actually playing any sounds, even when testing functionality that would normally trigger sound playback.
