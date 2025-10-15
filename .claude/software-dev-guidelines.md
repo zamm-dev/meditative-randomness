@@ -6,6 +6,8 @@
 - Separate concerns with distinct service classes (e.g., BaseService vs WorktreeService)
 - Use proper error types instead of throwing generic errors
 - Use type assertions and proper error handling for JSON parsing
+- **NEVER use `any` types or disable ESLint/TypeScript rules** - these defeat the purpose of type checking and linting
+- When facing type errors, use proper type definitions (interfaces, type aliases) or alternative approaches (e.g., `Object.defineProperty` for global mocks) instead of workarounds
 
 ## Testing Strategy
 
