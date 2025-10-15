@@ -206,6 +206,7 @@
 
 <style>
 	.history-container {
+		width: 100%;
 		margin-top: var(--space-6);
 		padding-top: var(--space-6);
 		border-top: 1px solid rgba(168, 198, 134, 0.2);

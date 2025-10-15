@@ -37,3 +37,11 @@ When the meditation time is up, a gentle sound should be played.
   - Show "Elapsed: MM:SS" label
   - Provide stop/end practice button
 - **After Completion**: Show completion message and option to restart
+
+## Layout Consistency
+
+The main meditation div (central content area) must maintain a consistent fixed width across all states (Setup, Running, and Completed). This ensures a stable, non-jarring visual experience as users transition between states.
+
+The fixed width should be responsive and relative to the browser window size. It should have a maximum width, but if the browser window gets smaller (e.g. on mobile), its width should similarly be constrained by the browser window width so as to not require horizontal scrolling.
+
+-

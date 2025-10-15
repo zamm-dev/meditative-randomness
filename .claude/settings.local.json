@@ -28,7 +28,8 @@
 			"WebSearch",
 			"Bash(pnpm exec tsc:*)",
 			"Bash(sed:*)",
-			"Bash(pnpm install)"
+			"Bash(pnpm install)",
+			"Bash(zamm impl create:*)"
 		],
 		"deny": [],
 		"ask": []
