@@ -32,7 +32,7 @@ test.describe('Import and Export Functionality', () => {
 			await page.locator('input[id="max-time"]').fill('0:01');
 			await page.locator('input[id="max-time"]').blur();
 			await page.locator('button:has-text("Begin Practice")').click();
-			await expect(page.locator('text=Practice Complete')).toBeVisible({ timeout: 10000 });
+			await expect(page.locator('text=Practice Complete')).toBeVisible();
 		}
 	}
 

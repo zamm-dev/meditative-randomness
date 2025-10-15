@@ -228,7 +228,7 @@ The `randomness.ts` utility provides controlled organic variations:
 - Remove all `force: true` from clicks - fix the underlying stability issues instead
 - Use `page.addInitScript()` before page navigation for mocking browser APIs
 - Don't use `force: true` to bypass Playwright's stability checks - they exist for good reason
-- Set proper timeouts with `{ timeout: 10000 }` on specific assertions, not global test timeouts
+- Prefer global test timeouts to timeouts on specific assertions
 - Don't use `page.waitForTimeout()` - use proper assertions that wait for conditions
 
 **Git and Commit Practices:**
