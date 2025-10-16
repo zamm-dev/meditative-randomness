@@ -148,7 +148,7 @@ The `randomness.ts` utility provides controlled organic variations:
 - Real-time average calculation that updates with every keystroke
 - Random duration generation from uniform distribution between min/max times
 - Elapsed time display during meditation (target duration remains hidden)
-- Gentle completion bell sound using Web Audio API
+- Meditation chime sounds: start chime plays when timer begins, end chime plays when timer completes
 - Sleep prevention during active meditation sessions
 - Single-card interface with smooth state transitions
 

@@ -20,7 +20,6 @@
 	let targetDuration = $state(0);
 
 	let intervalId: number | null = null;
-	let audioContext: AudioContext | null = null;
 
 	// Reactive calculations
 	let minTime = $derived(parseTimeString(minTimeInput));
@@ -44,7 +43,7 @@
 		maxTimeInput = formatInput(target.value);
 	}
 
-	function startTimer() {
+	async function startTimer() {
 		if (!minTime || !maxTime || !isValidRange) return;
 
 		targetDuration = generateRandomDuration(minTime, maxTime);
@@ -54,6 +53,10 @@
 		// Request wake lock to prevent device sleep during meditation
 		// Don't await to avoid blocking the UI
 		requestWakeLock();
+
+		// Play start chime sound
+		// Don't await to avoid blocking the UI
+		playSound('/sounds/chime-start.mp3');
 
 		intervalId = setInterval(() => {
 			elapsedSeconds++;
@@ -94,33 +97,15 @@
 		timerState = 'completed';
 
 		// Play completion sound
-		await playCompletionSound();
+		await playSound('/sounds/chime-end.mp3');
 	}
 
-	async function playCompletionSound() {
+	async function playSound(soundPath: string) {
 		try {
-			if (!audioContext) {
-				audioContext = new AudioContext();
-			}
-
-			// Create a gentle meditation bell sound using Web Audio API
-			const oscillator = audioContext.createOscillator();
-			const gainNode = audioContext.createGain();
-
-			oscillator.connect(gainNode);
-			gainNode.connect(audioContext.destination);
-
-			oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-			oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 2);
-
-			gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-			gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
-			gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);
-
-			oscillator.start(audioContext.currentTime);
-			oscillator.stop(audioContext.currentTime + 2);
+			const audio = new Audio(soundPath);
+			await audio.play();
 		} catch (error) {
-			console.warn('Could not play completion sound:', error);
+			console.warn(`Could not play sound ${soundPath}:`, error);
 		}
 	}
 
@@ -132,9 +117,6 @@
 	onDestroy(() => {
 		if (intervalId) {
 			clearInterval(intervalId);
-		}
-		if (audioContext) {
-			audioContext.close();
 		}
 		// Ensure wake lock is released on component cleanup
 		releaseWakeLock();
