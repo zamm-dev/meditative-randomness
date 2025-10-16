@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
-import { mockAudioContext } from './test-utils';
+import { mockAudio } from './test-utils';
 
 interface ExportData {
 	version: string;
@@ -19,8 +19,8 @@ test.describe('Import and Export Functionality', () => {
 		// Set prefers-reduced-motion to disable animations
 		await page.emulateMedia({ reducedMotion: 'reduce' });
 
-		// Mock AudioContext to prevent sound playback during tests
-		await mockAudioContext(page);
+		// Mock Audio constructor to prevent sound playback during tests
+		await mockAudio(page);
 
 		// Clear localStorage before each test
 		await page.goto('/');

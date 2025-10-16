@@ -51,6 +51,7 @@ export default [
 				HTMLElement: 'readonly',
 				HTMLInputElement: 'readonly',
 				Event: 'readonly',
+				Audio: 'readonly',
 				AudioContext: 'readonly',
 				setTimeout: 'readonly',
 				setInterval: 'readonly',

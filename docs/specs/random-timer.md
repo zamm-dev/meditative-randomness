@@ -11,6 +11,15 @@ Once the user hits start, a random destination time should be picked from a unif
 
 When the meditation time is up, a gentle sound should be played.
 
+## Sound Files
+
+The meditation timer should use the following sound files:
+
+- **Start chime**: `static/sounds/chime-start.mp3` - plays when the meditation timer begins
+- **End chime**: `static/sounds/chime-end.mp3` - plays when the meditation timer completes
+
+The application should reference these files using the paths `/sounds/chime-start.mp3` and `/sounds/chime-end.mp3`.
+
 ## User Interface States
 
 1. **Setup State**: Input fields, average display, disabled start button (until valid times entered). Input field values should be persisted across different states.

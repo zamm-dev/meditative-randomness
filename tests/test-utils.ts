@@ -1,44 +1,30 @@
 import { type Page } from '@playwright/test';
 
 /**
- * Mock AudioContext to prevent sound playback during tests
+ * Mock Audio constructor to prevent sound playback during tests
  */
-export async function mockAudioContext(page: Page): Promise<void> {
+export async function mockAudio(page: Page): Promise<void> {
 	await page.addInitScript(() => {
-		class MockAudioContext {
-			currentTime = 0;
-			destination = {};
+		class MockAudio {
+			src = '';
 
-			createOscillator() {
-				return {
-					connect: () => {},
-					frequency: {
-						setValueAtTime: () => {},
-						exponentialRampToValueAtTime: () => {}
-					},
-					start: () => {},
-					stop: () => {}
-				};
+			constructor(src?: string) {
+				if (src) {
+					this.src = src;
+				}
 			}
 
-			createGain() {
-				return {
-					connect: () => {},
-					gain: {
-						setValueAtTime: () => {},
-						linearRampToValueAtTime: () => {},
-						exponentialRampToValueAtTime: () => {}
-					}
-				};
-			}
-
-			close() {
+			play() {
 				return Promise.resolve();
 			}
+
+			pause() {}
+
+			load() {}
 		}
 
-		Object.defineProperty(globalThis, 'AudioContext', {
-			value: MockAudioContext,
+		Object.defineProperty(globalThis, 'Audio', {
+			value: MockAudio,
 			writable: true,
 			configurable: true
 		});

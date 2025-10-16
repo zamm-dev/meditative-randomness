@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { mockAudioContext } from './test-utils';
+import { mockAudio } from './test-utils';
 
 interface TestGlobal {
 	wakeLockRequested: boolean;
@@ -17,8 +17,8 @@ test.describe('Meditation Timer', () => {
 		// Set prefers-reduced-motion to disable animations
 		await page.emulateMedia({ reducedMotion: 'reduce' });
 
-		// Mock AudioContext to prevent sound playback during tests
-		await mockAudioContext(page);
+		// Mock Audio constructor to prevent sound playback during tests
+		await mockAudio(page);
 
 		await page.goto('/');
 	});

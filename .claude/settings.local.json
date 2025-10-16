@@ -34,7 +34,8 @@
 			"mcp__ide__getDiagnostics",
 			"Bash(git diff main --name-only --diff-filter=A)",
 			"Bash(zamm impl record docs/impl-history/svelte/disable-test-sounds-impl.md --last-n-commits 1)",
-			"Bash(zamm impl:*)"
+			"Bash(zamm impl:*)",
+			"Bash(zamm spec record WFR548 --last-n-commits 1)"
 		],
 		"deny": [],
 		"ask": []
