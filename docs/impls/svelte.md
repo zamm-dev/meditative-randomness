@@ -61,7 +61,7 @@ src/
 └── app.d.ts                         # TypeScript declarations
 
 tests/                               # Playwright tests
-├── test-utils.ts                    # Shared test utilities (AudioContext mocking, etc.)
+├── test-utils.ts                    # Shared test utilities (Audio mocking, etc.)
 ├── timer.spec.ts                    # Meditation timer tests
 ├── import-export.spec.ts            # Import/export functionality tests
 └── home.spec.ts                     # Basic page load tests
@@ -166,6 +166,13 @@ The `randomness.ts` utility provides controlled organic variations:
 - `releaseWakeLock()` - Release active wake lock with cleanup
 - `isWakeLockSupported()` - Progressive enhancement with feature detection
 
+**Sound Playback**: The timer uses the browser's `Audio` API for playing meditation chimes:
+
+- Sound files located in `static/sounds/` directory (served from `/sounds/` path)
+- `playSound(soundPath: string)` helper function creates `new Audio(path)` and calls `play()`
+- Error handling with `try/catch` and console warnings for playback failures
+- No cleanup needed - Audio instances are garbage collected after playback
+
 **Testing**: Complete Playwright test suite covering all timer functionality including input validation, state transitions, sleep prevention, and completion flow.
 
 ### Meditation History System
@@ -231,7 +238,7 @@ The `randomness.ts` utility provides controlled organic variations:
 - NEVER use `reducedMotion: 'reduce'` in Playwright config - it's not a valid option
 - Remove all `force: true` from clicks - fix the underlying stability issues instead
 - Use `page.addInitScript()` before page navigation for mocking browser APIs
-- Mock `AudioContext` using the shared `mockAudioContext()` helper from `tests/test-utils.ts` to prevent sound playback - apply this to any test that triggers timer completion
+- Mock `Audio` constructor using the shared `mockAudio()` helper from `tests/test-utils.ts` to prevent sound playback - apply this to any test that triggers timer start or completion
 - Create shared test utilities in `tests/test-utils.ts` to avoid duplicating mock code across test files
 - Don't use `force: true` to bypass Playwright's stability checks - they exist for good reason
 - Prefer global test timeouts to timeouts on specific assertions
