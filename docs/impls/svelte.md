@@ -61,6 +61,10 @@ src/
 └── app.d.ts                         # TypeScript declarations
 
 tests/                               # Playwright tests
+├── test-utils.ts                    # Shared test utilities (AudioContext mocking, etc.)
+├── timer.spec.ts                    # Meditation timer tests
+├── import-export.spec.ts            # Import/export functionality tests
+└── home.spec.ts                     # Basic page load tests
 ```
 
 ### Git Hooks
@@ -227,7 +231,8 @@ The `randomness.ts` utility provides controlled organic variations:
 - NEVER use `reducedMotion: 'reduce'` in Playwright config - it's not a valid option
 - Remove all `force: true` from clicks - fix the underlying stability issues instead
 - Use `page.addInitScript()` before page navigation for mocking browser APIs
-- Mock `AudioContext` using `Object.defineProperty(globalThis, 'AudioContext', {...})` to prevent sound playback in tests - this avoids TypeScript type compatibility issues that occur with direct assignment
+- Mock `AudioContext` using the shared `mockAudioContext()` helper from `tests/test-utils.ts` to prevent sound playback - apply this to any test that triggers timer completion
+- Create shared test utilities in `tests/test-utils.ts` to avoid duplicating mock code across test files
 - Don't use `force: true` to bypass Playwright's stability checks - they exist for good reason
 - Prefer global test timeouts to timeouts on specific assertions
 - Don't use `page.waitForTimeout()` - use proper assertions that wait for conditions
