@@ -15,3 +15,5 @@ You are in a fresh Git worktree directory. You are here to update the spec with 
 - When specs reference external tools or CLI commands, verify they actually exist through documentation research before including them in the spec. Don't assume commands exist based on intuitive naming patterns.
 - Before updating specs, thoroughly understand existing behavior by reading related implementation files and documentation. Don't make assumptions about how commands work or what they return.
 - If creating new spec files, don't duplicate the ID of the existing changelog spec. IDs should be unique.
+- When the changelog requests adding external files (e.g., assets from ~/Downloads), copy them into the project yourself first, then write the spec using internal project paths. Don't make copying files part of the spec - future implementors won't have access to the user's personal directories. Afterwards, update the changelog to reference these internal paths.
+- Prefer updating a relevant existing spec over creating a new one.
