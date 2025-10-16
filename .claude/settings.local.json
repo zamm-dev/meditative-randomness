@@ -29,7 +29,11 @@
 			"Bash(pnpm exec tsc:*)",
 			"Bash(sed:*)",
 			"Bash(pnpm install)",
-			"Bash(zamm impl create:*)"
+			"Bash(zamm impl create:*)",
+			"Bash(git stash)",
+			"mcp__ide__getDiagnostics",
+			"Bash(git diff main --name-only --diff-filter=A)",
+			"Bash(zamm impl record docs/impl-history/svelte/disable-test-sounds-impl.md --last-n-commits 1)"
 		],
 		"deny": [],
 		"ask": []

@@ -227,6 +227,7 @@ The `randomness.ts` utility provides controlled organic variations:
 - NEVER use `reducedMotion: 'reduce'` in Playwright config - it's not a valid option
 - Remove all `force: true` from clicks - fix the underlying stability issues instead
 - Use `page.addInitScript()` before page navigation for mocking browser APIs
+- Mock `AudioContext` using `Object.defineProperty(globalThis, 'AudioContext', {...})` to prevent sound playback in tests - this avoids TypeScript type compatibility issues that occur with direct assignment
 - Don't use `force: true` to bypass Playwright's stability checks - they exist for good reason
 - Prefer global test timeouts to timeouts on specific assertions
 - Don't use `page.waitForTimeout()` - use proper assertions that wait for conditions
