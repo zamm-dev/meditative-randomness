@@ -8,4 +8,4 @@ commits:
 
 # Meditation Sound Specification: chime-end.mp3 and chime-start.mp3
 
-Use ~/Downloads/chime-end.mp3 and ~/Downloads/chime-start.mp3 as sounds for meditation start and end
+Use `static/sounds/chime-start.mp3` and `static/sounds/chime-end.mp3` as sounds for meditation start and end. These files should be referenced in the application via `/sounds/chime-start.mp3` and `/sounds/chime-end.mp3`.
