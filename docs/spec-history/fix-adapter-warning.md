@@ -1,6 +1,9 @@
 ---
 id: HUB751
 type: spec
+commits:
+  - sha: 55ad80e78ab5d6aec924a49a6fe59c713026304d
+    message: Fix SvelteKit adapter configuration warning by using adapter-static
 ---
 
 # Fix Build Warning for Svelte Kit Adapter Configuration
