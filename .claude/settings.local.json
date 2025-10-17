@@ -36,7 +36,11 @@
 			"Bash(zamm impl:*)",
 			"Bash(zamm spec record:*)",
 			"Bash(git merge:*)",
-			"Bash(git stash:*)"
+			"Bash(git stash:*)",
+			"Bash(git rev-parse:*)",
+			"WebFetch(domain:svelte.dev)",
+			"Bash(lsof:*)",
+			"Bash(xargs kill:*)"
 		],
 		"deny": [],
 		"ask": []
