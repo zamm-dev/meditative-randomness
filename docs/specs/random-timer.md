@@ -24,7 +24,7 @@ The application should reference these files using the paths `/sounds/chime-star
 
 1. **Setup State**: Input fields, average display, disabled start button (until valid times entered). Input field values should be persisted across different states.
 2. **Running State**: Elapsed timer, stop button, hidden target duration
-3. **Completed State**: Completion message, restart option, quick redo button that immediately starts a new meditation session with the same min/max parameters (generating a new random duration)
+3. **Completed State**: Completion message, restart option that brings you back to the Setup State, quick redo button that immediately starts a new meditation session with the same min/max parameters (generating a new random duration). The restart and redo buttons should have icons associated with them.
 
 ## Time Input Interface
 
