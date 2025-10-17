@@ -29,11 +29,21 @@ pnpm install
 - `pnpm format` - Format all code
 - `pnpm lint` - Lint code
 
+### SvelteKit Configuration
+
+The project is configured as a **static site** using `@sveltejs/adapter-static`:
+
+- All routes are prerendered (via `export const prerender = true` in `src/routes/+layout.js`)
+- Static output is generated to the `build/` directory
+- The application is served via a reverse proxy (nginx or similar)
+- No server-side rendering or dynamic routes required
+
 ### Project Structure
 
 ```
 src/
 ├── routes/                           # SvelteKit routes
+│   ├── +layout.js                   # Prerender configuration (export const prerender = true)
 │   ├── +layout.svelte               # Global layout with theming system
 │   └── +page.svelte                 # Main page with meditative design
 ├── lib/                             # Shared components and utilities
