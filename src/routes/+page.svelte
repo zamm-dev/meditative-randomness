@@ -44,10 +44,6 @@
 	<section class="timer-section">
 		<MeditationTimer />
 	</section>
-
-	<footer class="page-footer">
-		<p class="footer-text">A quiet companion for your journey between certainty and wonder</p>
-	</footer>
 </div>
 
 <style>
@@ -92,21 +88,6 @@
 		max-width: 600px;
 		margin: 0;
 		opacity: 0.9;
-	}
-
-	.page-footer {
-		text-align: center;
-		padding: var(--space-12) 0;
-		border-top: 1px solid rgba(255, 255, 255, 0.2);
-		margin-top: var(--space-8);
-	}
-
-	.footer-text {
-		font-size: var(--text-sm);
-		color: var(--color-neutral-dark);
-		opacity: 0.7;
-		font-style: italic;
-		margin: 0;
 	}
 
 	/* Entrance animations */
