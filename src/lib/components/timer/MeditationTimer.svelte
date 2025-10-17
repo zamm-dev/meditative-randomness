@@ -2,6 +2,7 @@
 	import { onDestroy } from 'svelte';
 	import MeditativeCard from '$lib/components/ui/MeditativeCard.svelte';
 	import MeditationHistory from '$lib/components/timer/MeditationHistory.svelte';
+	import { RotateCw, AlignVerticalJustifyEnd as NewPracticeIcon } from 'lucide-svelte';
 	import {
 		parseTimeString,
 		formatTimeInput,
@@ -43,10 +44,7 @@
 		maxTimeInput = formatInput(target.value);
 	}
 
-	async function startTimer() {
-		if (!minTime || !maxTime || !isValidRange) return;
-
-		targetDuration = generateRandomDuration(minTime, maxTime);
+	function beginTimerWithDuration() {
 		elapsedSeconds = 0;
 		timerState = 'running';
 
@@ -65,6 +63,13 @@
 				completeTimer();
 			}
 		}, 1000);
+	}
+
+	async function startTimer() {
+		if (!minTime || !maxTime || !isValidRange) return;
+
+		targetDuration = generateRandomDuration(minTime, maxTime);
+		beginTimerWithDuration();
 	}
 
 	function stopTimer() {
@@ -112,6 +117,11 @@
 	function resetTimer() {
 		timerState = 'idle';
 		elapsedSeconds = 0;
+	}
+
+	async function redoTimer() {
+		// Restart with the same min/max parameters, generating a new random duration
+		startTimer();
 	}
 
 	onDestroy(() => {
@@ -190,7 +200,16 @@
 			<div class="timer-completed">
 				<div class="completion-title">Practice Complete</div>
 				<div class="completion-time">Total time: {secondsToTimeString(elapsedSeconds)}</div>
-				<button onclick={resetTimer} class="timer-button reset-button"> New Practice </button>
+				<div class="button-group">
+					<button onclick={redoTimer} class="timer-button redo-button">
+						<RotateCw size={20} />
+						Redo
+					</button>
+					<button onclick={resetTimer} class="timer-button reset-button">
+						<NewPracticeIcon size={20} />
+						New Practice
+					</button>
+				</div>
 
 				<MeditationHistory />
 			</div>
@@ -327,7 +346,7 @@
 		font-weight: var(--font-weight-medium);
 		cursor: pointer;
 		transition: all var(--duration-normal) var(--ease-out);
-		min-width: 160px;
+		min-width: 210px;
 	}
 
 	.start-button {
@@ -362,6 +381,35 @@
 	}
 
 	.stop-button:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-deep);
+	}
+
+	.button-group {
+		display: flex;
+		gap: var(--space-3);
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.button-group button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-4);
+	}
+
+	.redo-button {
+		background: linear-gradient(
+			135deg,
+			var(--color-green-primary) 0%,
+			var(--color-green-deep) 100%
+		);
+		color: white;
+		box-shadow: var(--shadow-medium);
+	}
+
+	.redo-button:hover {
 		transform: translateY(-2px);
 		box-shadow: var(--shadow-deep);
 	}
