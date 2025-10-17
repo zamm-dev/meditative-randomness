@@ -8,6 +8,8 @@ impl:
   id: KIT939
   path: /impls/svelte.md
 commits:
+  - sha: b8f6a560ec2a7363bd3d358b8b4a403e261f93c7
+    message: Add and style icons for meditation restart and redo buttons
   - sha: ef4d649d99711aaf6dd9f818b6c7375fd8c842f5
     message: Add quick redo button for meditation timer
 ---

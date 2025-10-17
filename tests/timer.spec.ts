@@ -264,8 +264,8 @@ test.describe('Meditation Timer', () => {
 		// Wait for completion
 		await expect(page.locator('text=Practice Complete')).toBeVisible();
 
-		// Check that Quick Redo button is visible
-		await expect(page.locator('button:has-text("Quick Redo")')).toBeVisible();
+		// Check that Redo button is visible
+		await expect(page.locator('button:has-text("Redo")')).toBeVisible();
 		await expect(page.locator('button:has-text("New Practice")')).toBeVisible();
 	});
 
@@ -282,8 +282,8 @@ test.describe('Meditation Timer', () => {
 		await expect(page.locator('text=Practice Complete')).toBeVisible();
 		const firstDuration = await page.locator('.completion-time').textContent();
 
-		// Click Quick Redo
-		await page.locator('button:has-text("Quick Redo")').click();
+		// Click Redo
+		await page.locator('button:has-text("Redo")').click();
 
 		// Verify timer restarted with same parameters (shows expected average: 0:02)
 		await expect(page.locator('.elapsed-time')).toBeVisible();
@@ -319,8 +319,8 @@ test.describe('Meditation Timer', () => {
 		const state1 = await getWakeLockState(page);
 		expect(state1.wakeLockReleased).toBe(true);
 
-		// Click Quick Redo
-		await page.locator('button:has-text("Quick Redo")').click();
+		// Click Redo
+		await page.locator('button:has-text("Redo")').click();
 
 		// Verify wake lock was requested again
 		// (Note: the mock doesn't reset wakeLockRequested, so it should still be true)
