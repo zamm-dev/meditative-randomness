@@ -12,6 +12,10 @@ A new record should be created upon the succesful completion of a meditation ses
 > [!NOTE]
 > Records should be stored in local storage instead of browser cookies because cookies are limited to 4 KB.
 
+## Total Time Display
+
+The meditation history should display the total time spent meditating across all sessions on all days at the top of the history view.
+
 ## Date Grouping
 
 History entries should be grouped by date. Each grouped entry displays:

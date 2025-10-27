@@ -8,6 +8,7 @@
 		formatDuration,
 		formatDate,
 		groupRecordsByDate,
+		calculateTotalDuration,
 		type MeditationRecord,
 		exportMeditationHistory,
 		generateExportFilename,
@@ -146,6 +147,9 @@
 			<p class="empty-subtitle">Complete a meditation to see your history here.</p>
 		</div>
 	{:else}
+		<div class="total-duration">
+			<span class="total-text">{formatDuration(calculateTotalDuration(history))} in total</span>
+		</div>
 		<div class="history-list">
 			{#each dateGroups as group (group.date)}
 				<div class="date-group">
@@ -317,6 +321,17 @@
 	.empty-subtitle {
 		font-size: var(--text-sm);
 		margin-top: var(--space-2) !important;
+	}
+
+	.total-duration {
+		margin-bottom: var(--space-4);
+	}
+
+	.total-text {
+		font-size: var(--text-base);
+		font-weight: var(--font-weight-medium);
+		color: var(--color-neutral-dark);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.history-list {

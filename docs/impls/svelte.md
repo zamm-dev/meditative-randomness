@@ -206,10 +206,11 @@ The `randomness.ts` utility provides controlled organic variations:
 - `getMeditationHistory()` - Retrieve session history from `localStorage`
 - `deleteMeditationRecord()` - Remove specific sessions by ID
 - `formatEndTime()` - Display-friendly time formatting with timezone
-- `formatDuration()` - Human-readable duration formatting (e.g., "5m 30s")
+- `formatDuration()` - Human-readable duration formatting (e.g., "5m 30s", "2h 15m 30s" for durations >= 1 hour)
 - `getDateString()` - Extract YYYY-MM-DD from ISO timestamp
 - `formatDate()` - Format date for display using browser locale
 - `groupRecordsByDate()` - Group records by date with totals, sorted newest first
+- `calculateTotalDuration()` - Sum total meditation time across all records
 - `DateGroup` interface with `date`, `totalDuration`, and `records` fields
 - Returns the stored array as-is after a shallow shape check, logging only when the payload is not an array
 
@@ -274,6 +275,7 @@ The `randomness.ts` utility provides controlled organic variations:
 - Use object/array types (`Record<string, boolean>`) instead of `Set` for reactive collections
 - Replace objects/arrays immutably (spread syntax) to trigger reactivity
 - Don't manually sync derived state - let `$derived` handle it automatically
+- **Firefox Performance**: For calculations in frequently-updated reactive contexts, prefer inline computation in templates over `$derived` variables to avoid Firefox-specific slowdowns (e.g., `{formatDuration(calculateTotalDuration(history))}` instead of `let total = $derived(calculateTotalDuration(history))`)
 
 **Svelte Transitions and Accessibility:**
 
