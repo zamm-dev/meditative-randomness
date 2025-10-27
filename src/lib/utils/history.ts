@@ -122,9 +122,23 @@ export function formatEndTime(endTime: string): string {
  * Format duration for display
  */
 export function formatDuration(seconds: number): string {
-	const minutes = Math.floor(seconds / 60);
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor((seconds % 3600) / 60);
 	const remainingSeconds = seconds % 60;
 
+	// If duration is >= 1 hour, format with hours
+	if (hours > 0) {
+		const parts: string[] = [`${hours}h`];
+		if (minutes > 0) {
+			parts.push(`${minutes}m`);
+		}
+		if (remainingSeconds > 0) {
+			parts.push(`${remainingSeconds}s`);
+		}
+		return parts.join(' ');
+	}
+
+	// Otherwise, format with minutes and seconds
 	if (minutes === 0) {
 		return `${remainingSeconds}s`;
 	}
@@ -193,6 +207,13 @@ export function groupRecordsByDate(records: MeditationRecord[]): DateGroup[] {
 
 	// Convert to array and sort by date (newest first)
 	return Array.from(groups.values()).sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/**
+ * Calculate total meditation time across all records
+ */
+export function calculateTotalDuration(records: MeditationRecord[]): number {
+	return records.reduce((total, record) => total + record.duration, 0);
 }
 
 /**
