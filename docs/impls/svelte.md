@@ -63,6 +63,7 @@ src/
 │   │   ├── randomness.ts            # Controlled randomness utilities
 │   │   ├── timer.ts                 # Time parsing, formatting, and validation utilities
 │   │   ├── wake-lock.ts             # Sleep prevention utilities
+│   │   ├── sound.ts                 # Sound preloading and playback utilities
 │   │   └── history.ts               # Meditation session history storage via localStorage
 │   ├── types/
 │   │   └── browser.ts               # Type re-export helpers for DOM globals
@@ -97,7 +98,7 @@ To install hooks: `pnpm lefthook install`
 
 ### Testing
 
-Uses Playwright for end-to-end testing with Chromium, Firefox, and WebKit browsers.
+Uses Playwright for end-to-end testing with Chromium and WebKit browsers. Firefox tests are disabled due to flaky timeout issues.
 
 ## Theming Architecture
 
@@ -176,12 +177,14 @@ The `randomness.ts` utility provides controlled organic variations:
 - `releaseWakeLock()` - Release active wake lock with cleanup
 - `isWakeLockSupported()` - Progressive enhancement with feature detection
 
-**Sound Playback**: The timer uses the browser's `Audio` API for playing meditation chimes:
+**Sound Playback**: The `sound.ts` utility module provides sound preloading and playback:
 
 - Sound files located in `static/sounds/` directory (served from `/sounds/` path)
-- `playSound(soundPath: string)` helper function creates `new Audio(path)` and calls `play()`
-- Error handling with `try/catch` and console warnings for playback failures
-- No cleanup needed - Audio instances are garbage collected after playback
+- `preloadSounds()` creates Audio instances on page load with `preload = 'auto'`
+- Preloaded instances stored in a Map to avoid repeated network requests
+- `playSound(soundPath: string)` reuses preloaded Audio instances by resetting `currentTime` to 0
+- Error handling with `try/catch` and console warnings for both preload and playback failures
+- Fallback to creating new Audio instances if sounds weren't preloaded
 
 **Testing**: Complete Playwright test suite covering all timer functionality including input validation, state transitions, sleep prevention, and completion flow.
 
