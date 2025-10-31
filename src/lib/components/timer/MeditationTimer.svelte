@@ -13,6 +13,7 @@
 	} from '$lib/utils/timer';
 	import { requestWakeLock, releaseWakeLock } from '$lib/utils/wake-lock';
 	import { saveMeditationRecord } from '$lib/utils/history';
+	import { playSound } from '$lib/utils/sound';
 
 	let minTimeInput = $state('5:00');
 	let maxTimeInput = $state('10:00');
@@ -103,15 +104,6 @@
 
 		// Play completion sound
 		await playSound('/sounds/chime-end.mp3');
-	}
-
-	async function playSound(soundPath: string) {
-		try {
-			const audio = new Audio(soundPath);
-			await audio.play();
-		} catch (error) {
-			console.warn(`Could not play sound ${soundPath}:`, error);
-		}
 	}
 
 	function resetTimer() {

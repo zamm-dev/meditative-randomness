@@ -30,7 +30,9 @@ export default [
 				process: 'readonly',
 				navigator: 'readonly',
 				WakeLockSentinel: 'readonly',
-				EventTarget: 'readonly'
+				EventTarget: 'readonly',
+				Audio: 'readonly',
+				HTMLAudioElement: 'readonly'
 			}
 		},
 		plugins: {
@@ -50,6 +52,7 @@ export default [
 			globals: {
 				HTMLElement: 'readonly',
 				HTMLInputElement: 'readonly',
+				HTMLAudioElement: 'readonly',
 				Event: 'readonly',
 				Audio: 'readonly',
 				AudioContext: 'readonly',

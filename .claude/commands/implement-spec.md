@@ -6,8 +6,11 @@ We are going to implement changes to the spec on the project implementation desc
 
 1. **Spec Analysis**: Run `git diff main` to understand the latest requested spec changes and implementation requirements
 2. **Implementation**: Implement the specification following development best practices (see guidelines below). When user provides feedback that requires changes, immediately run `git add` to stage the changes before committing.
-3. **Testing**: Run tests before committing. For workflow/script changes, run E2E tests as well. If tests fail, investigate thoroughly - assume all tests were passing before you started. If you are really convinced that the failures are not due to your changes, prove it with `git stash`.
-4. **Code Commit**: ALWAYS commit the implementation code changes at the end. You may even commit multiple times if there are natural checkpoints to do so at during development.
+3. **Testing**: Run tests before committing.
+   - For workflow/script changes, run E2E tests as well. If tests fail, investigate thoroughly - assume all tests were passing before you started.
+   - If you are really convinced that the failures are not due to your changes, prove it with `git stash`.
+   - When disabling tests, do not comment code out. Either disable the tests with a "skip" marker or delete the code entirely, with a corresponding comment explaining why.
+4. **Code Commit**: ALWAYS commit the implementation code changes at the end. You may even commit multiple times if there are natural checkpoints to do so at during development. When pre-commit hooks fail due to linting/type errors, fix them properly by updating configuration files (e.g., adding missing globals to ESLint config) rather than ignoring them (e.g. adding eslint-disable comments).
 
 ## User Collaboration Guidelines
 

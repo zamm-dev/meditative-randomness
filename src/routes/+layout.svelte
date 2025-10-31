@@ -1,11 +1,18 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
 	import ShiftingGradient from '$lib/components/animations/ShiftingGradient.svelte';
 	import DriftingParticles from '$lib/components/animations/DriftingParticles.svelte';
 	import BreathingContainer from '$lib/components/animations/BreathingContainer.svelte';
+	import { preloadSounds } from '$lib/utils/sound';
 	import '$lib/styles/globals.css';
 
 	let { children } = $props();
+
+	// Preload sounds when the page loads
+	onMount(() => {
+		preloadSounds();
+	});
 </script>
 
 <svelte:head>

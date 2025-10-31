@@ -20,6 +20,16 @@ The meditation timer should use the following sound files:
 
 The application should reference these files using the paths `/sounds/chime-start.mp3` and `/sounds/chime-end.mp3`.
 
+### Sound Preloading
+
+Sound files must be preloaded when the page loads. This ensures:
+
+- Immediate playback when needed without network delay
+- No network requests are made after the initial page load once sounds are loaded
+- A smoother user experience with no lag when starting or ending meditation sessions
+
+The preloading should happen asynchronously during page initialization, and the application should avoid making additional network requests for these sound files after they have been initially loaded.
+
 ## User Interface States
 
 1. **Setup State**: Input fields, average display, disabled start button (until valid times entered). Input field values should be persisted across different states.
