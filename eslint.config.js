@@ -58,6 +58,7 @@ export default [
 				AudioContext: 'readonly',
 				setTimeout: 'readonly',
 				setInterval: 'readonly',
+				clearTimeout: 'readonly',
 				clearInterval: 'readonly',
 				requestAnimationFrame: 'readonly',
 				console: 'readonly',

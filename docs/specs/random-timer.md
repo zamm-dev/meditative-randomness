@@ -63,6 +63,17 @@ The main meditation div (central content area) must maintain a consistent fixed 
 
 The fixed width should be responsive and relative to the browser window size. It should have a maximum width, but if the browser window gets smaller (e.g. on mobile), its width should similarly be constrained by the browser window width so as to not require horizontal scrolling.
 
+## Timer Implementation
+
+The implementation should follow these principles:
+
+- **Meditation end**: Use one `setTimeout` call to schedule the timer completion at the exact target time
+- **Display Updates**: Use `setInterval` only for updating the displayed elapsed time
+
+  Do not check timer completion here, as that does not account for any delays due to JS event loop execution or general browser slowdowns.
+
+- **History Recording**: Save the target duration (not the display counter) to ensure accurate session records
+
 ## Testing
 
 When testing the meditation timer functionality, ensure that sound playback is disabled. Tests should verify the timer behavior and completion logic without actually playing any sounds, even when testing functionality that would normally trigger sound playback.
