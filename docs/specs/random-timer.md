@@ -72,6 +72,8 @@ The implementation should follow these principles:
 
   Do not check timer completion here, as that does not account for any delays due to JS event loop execution or general browser slowdowns.
 
+- **History Recording**: Save the target duration (not the display counter) to ensure accurate session records
+
 ## Testing
 
 When testing the meditation timer functionality, ensure that sound playback is disabled. Tests should verify the timer behavior and completion logic without actually playing any sounds, even when testing functionality that would normally trigger sound playback.
