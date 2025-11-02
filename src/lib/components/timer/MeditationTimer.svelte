@@ -22,6 +22,7 @@
 	let targetDuration = $state(0);
 
 	let intervalId: number | null = null;
+	let timeoutId: number | null = null;
 
 	// Reactive calculations
 	let minTime = $derived(parseTimeString(minTimeInput));
@@ -57,12 +58,14 @@
 		// Don't await to avoid blocking the UI
 		playSound('/sounds/chime-start.mp3');
 
+		// Use setTimeout to schedule exact completion time
+		timeoutId = setTimeout(() => {
+			completeTimer();
+		}, targetDuration * 1000);
+
+		// Use setInterval only for updating the display
 		intervalId = setInterval(() => {
 			elapsedSeconds++;
-
-			if (elapsedSeconds >= targetDuration) {
-				completeTimer();
-			}
 		}, 1000);
 	}
 
@@ -78,6 +81,10 @@
 			clearInterval(intervalId);
 			intervalId = null;
 		}
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+			timeoutId = null;
+		}
 
 		// Release wake lock when timer is stopped
 		// Don't await to avoid blocking the UI
@@ -92,13 +99,20 @@
 			clearInterval(intervalId);
 			intervalId = null;
 		}
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+			timeoutId = null;
+		}
 
 		// Release wake lock when timer completes
 		// Don't await to avoid blocking the state change
 		releaseWakeLock();
 
-		// Save meditation record to history
-		saveMeditationRecord(elapsedSeconds);
+		// Set elapsed seconds to target duration for accurate completion time
+		elapsedSeconds = targetDuration;
+
+		// Save meditation record to history with the target duration
+		saveMeditationRecord(targetDuration);
 
 		timerState = 'completed';
 
@@ -119,6 +133,9 @@
 	onDestroy(() => {
 		if (intervalId) {
 			clearInterval(intervalId);
+		}
+		if (timeoutId) {
+			clearTimeout(timeoutId);
 		}
 		// Ensure wake lock is released on component cleanup
 		releaseWakeLock();
